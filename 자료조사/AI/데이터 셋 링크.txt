@@ -2,6 +2,7 @@ ai hub
 https://aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=realm&dataSetSn=179
 roboflow
 https://public.roboflow.com/object-detection/pothole
+https://universe.roboflow.com/bozukyoltespiti/enes_guvercin_bozuk_yol_tespiti
 kaggle
 https://www.kaggle.com/datasets/sachinpatel21/pothole-image-dataset
 https://www.kaggle.com/datasets/sovitrath/road-pothole-images-for-pothole-detection
