@@ -1,0 +1,13 @@
+ai hub
+https://aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=realm&dataSetSn=179
+roboflow
+https://public.roboflow.com/object-detection/pothole
+kaggle
+https://www.kaggle.com/datasets/sachinpatel21/pothole-image-dataset
+https://www.kaggle.com/datasets/sovitrath/road-pothole-images-for-pothole-detection
+https://www.kaggle.com/datasets/rajdalsaniya/pothole-detection-dataset
+https://www.kaggle.com/datasets/salimhammadi07/miia-pothole-image-classification-challenge
+https://www.kaggle.com/datasets/hosen42/pothole-data
+datasetninja
+https://datasetninja.com/road-damage-detector
+https://datasetninja.com/pothole-detection
