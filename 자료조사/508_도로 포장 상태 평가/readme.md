@@ -10,5 +10,13 @@ https://www.si.re.kr/sites/default/files/200606_03.pdf
 #### 균열
 도로 표면에 발생하는 균열의 형태와 범위
 
+SPI = 10 - PDI
+PDI = ((10-SPI1)**5 + (10-SPI2)**5 + (10-SPI3)**5)**0.2
+SPI1 = 10 - 2.23 * (포장의 균열율)**0.3
+SPI2 = 10 - 0.2 * 평균 소성변형 깊이
+SPI3 = 10 - 0.531 * 종단 평탄성
+
+![이미지]()
+
 ## 도로 포장 상태 등급
 https://news.seoul.go.kr/safe/archives/332
