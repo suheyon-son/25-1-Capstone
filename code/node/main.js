@@ -2,7 +2,7 @@ const express = require('express')
 const mysql = require('mysql');
 
 const connection = mysql.createConnection({
-  host: '34.64.226.36',
+  host: '10.74.16.3',
   user: 'root',
   password: '1234',
   database: 'capstone'
