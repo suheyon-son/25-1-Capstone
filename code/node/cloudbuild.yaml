@@ -1,0 +1,25 @@
+steps:
+  # 1. docker-compose build
+  - name: docker/compose:1.29.0
+    args:
+      - -f
+      - docker-compose.k8s.prod.yaml
+      - build
+
+  # 2. docker-compose push
+  - name: docker/compose:1.29.0
+    args:
+      - -f
+      - docker-compose.k8s.prod.yaml
+      - push
+
+  # 3. kubectl로 이미지 업데이트 (롤링 업데이트 트리거)
+  - name: gcr.io/cloud-builders/kubectl
+    args:
+      - set
+      - image
+      - deployment/capstone-nestjs
+      - capstone-nestjs=asia.gcr.io/steel-fin-459711-k9/capstone-mysql:0.1
+    env:
+      - CLOUDSDK_COMPUTE_REGION=asia-northeast3
+      - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1

@@ -1,30 +1,31 @@
-const express = require('express');
+const express = require('express')
 const mysql = require('mysql');
 
 const connection = mysql.createConnection({
-  host: '10.74.16.3',
+  host: 'my-database.suhyeon.xyz',
   user: 'root',
   password: '1234',
   database: 'capstone'
 });
 
-const app = express();
-const port = 37812;
-
 connection.connect((err) => {
   if (err) {
-    console.error('❌ DB 연결 실패:', err);
-    process.exit(1); // 연결 실패 시 서버 종료
+    console.error('DB 연결 실패:', err);
+    return;
   }
-  
-  console.log('✅ Cloud SQL에 연결되었습니다.');
-
-  // DB 연결 성공 후 서버 시작
-  app.get('/', (req, res) => {
-    res.send('Hello World!');
-  });
-
-  app.listen(port, () => {
-    console.log(`🚀 서버 실행 중: http://34.64.119.252:${port}`);
-  });
+  console.log('Cloud SQL에 연결되었습니다.');
 });
+
+const app = express()
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.get('/health', (req,res) => {
+  res.status(200).send('ok');
+});
+
+app.listen(3000, '0.0.0.0', () => {
+  console.log(`Example app listening on port 3000`)
+})
