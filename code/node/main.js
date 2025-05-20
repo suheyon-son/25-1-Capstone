@@ -29,3 +29,5 @@ app.get('/health', (req,res) => {
 app.listen(3000, '0.0.0.0', () => {
   console.log(`Example app listening on port 3000`)
 })
+
+// CI/CD 테스트용 주석
