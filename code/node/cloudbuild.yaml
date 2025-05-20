@@ -2,21 +2,18 @@ options:
   logging: CLOUD_LOGGING_ONLY  # 로그는 GCP Cloud Logging으로만 기록
 
 steps:
-  # 1. docker-compose build
   - name: docker/compose:1.29.0
     args:
       - -f
-      - docker-compose.k8s.prod.yaml
+      - code/node/docker-compose.k8s.prod.yaml
       - build
 
-  # 2. docker-compose push
   - name: docker/compose:1.29.0
     args:
       - -f
-      - docker-compose.k8s.prod.yaml
+      - code/node/docker-compose.k8s.prod.yaml
       - push
 
-  # 3. kubectl set image (배포 갱신)
   - name: gcr.io/cloud-builders/kubectl
     args:
       - set
