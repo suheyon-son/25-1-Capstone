@@ -2,8 +2,8 @@
 FROM node:18 AS builder
 WORKDIR /app/web
 
-# 루트가 컨텍스트이므로 web 폴더를 이렇게 복사
-COPY web ./       
+# 빌드 컨텍스트 루트가 25-1-Capstone이므로 code/web 경로를 복사해야 함
+COPY code/web ./       
 
 RUN npm install
 RUN npm run build
