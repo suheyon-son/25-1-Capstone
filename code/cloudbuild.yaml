@@ -1,22 +1,19 @@
 steps:
-  # 1. Docker 이미지 빌드
   - name: gcr.io/cloud-builders/docker
-    dir: ../    # <- build context를 루트 (25-1-Capstone/)로 설정
+    dir: ../       # build context: 25-1-Capstone
     args:
       - build
       - -t
       - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
       - -f
-      - code/node/Dockerfile  # 이 Dockerfile은 build context 내 경로 기준
-      - .                     # context root (25-1-Capstone)
+      - code/node/Dockerfile   # 상대경로
+      - .                      # context root
 
-  # 2. Docker 이미지 푸시
   - name: gcr.io/cloud-builders/docker
     args:
       - push
       - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
 
-  # 3. 쿠버네티스에 이미지 반영
   - name: gcr.io/cloud-builders/kubectl
     args:
       - set
