@@ -1,19 +1,20 @@
 steps:
   # 1. Docker 이미지 빌드
-  - name: docker/compose:1.29.0
-    dir: .
+  - name: gcr.io/cloud-builders/docker
+    dir: ../..  # → build context = 25-1-Capstone/
     args:
-      - -f
-      - code/docker-compose.k8s.prod.yaml
       - build
+      - -t
+      - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
+      - -f
+      - code/node/Dockerfile
+      - .
 
   # 2. 이미지 푸시
-  - name: docker/compose:1.29.0
-    dir: .
+  - name: gcr.io/cloud-builders/docker
     args:
-      - -f
-      - code/docker-compose.k8s.prod.yaml
       - push
+      - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
 
   # 3. 쿠버네티스 워크로드에 이미지 반영
   - name: gcr.io/cloud-builders/kubectl
