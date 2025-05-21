@@ -23,3 +23,6 @@ steps:
 
 images:
   - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
+
+options:
+  logging: CLOUD_LOGGING_ONLY
