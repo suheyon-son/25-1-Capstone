@@ -1,19 +1,23 @@
 steps:
+  # 1. Docker 이미지 빌드
   - name: gcr.io/cloud-builders/docker
-    dir: ../       # build context: 25-1-Capstone
+    dir: .               # code/ 폴더 내에서 실행
     args:
       - build
       - -t
       - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
       - -f
-      - code/node/Dockerfile   # 상대경로
-      - .                      # context root
+      - node/Dockerfile   # code/ 기준 상대 경로
+      - .
 
+  # 2. 이미지 푸시
   - name: gcr.io/cloud-builders/docker
+    dir: .
     args:
       - push
       - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
 
+  # 3. 쿠버네티스에 이미지 반영
   - name: gcr.io/cloud-builders/kubectl
     args:
       - set
