@@ -7,6 +7,10 @@ steps:
       - -f
       - code/node/Dockerfile
       - .
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
   - name: gcr.io/cloud-builders/kubectl
     args:
       - set
