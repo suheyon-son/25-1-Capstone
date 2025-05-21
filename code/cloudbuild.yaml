@@ -3,14 +3,14 @@ steps:
   - name: docker/compose:1.29.0
     args:
       - -f
-      - docker-compose.k8s.prod.yaml
+      - code/docker-compose.k8s.prod.yaml
       - build
 
   # 2. 이미지 푸시
   - name: docker/compose:1.29.0
     args:
       - -f
-      - docker-compose.k8s.prod.yaml
+      - code/docker-compose.k8s.prod.yaml
       - push
 
   # 3. 쿠버네티스 워크로드에 이미지 반영
