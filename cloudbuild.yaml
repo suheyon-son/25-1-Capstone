@@ -1,23 +1,16 @@
 steps:
-  # 1. Docker 이미지 빌드
   - name: gcr.io/cloud-builders/docker
-    dir: .               # code/ 폴더 내에서 실행
     args:
       - build
       - -t
       - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
       - -f
-      - node/Dockerfile   # code/ 기준 상대 경로
+      - code/node/Dockerfile
       - .
-
-  # 2. 이미지 푸시
   - name: gcr.io/cloud-builders/docker
-    dir: .
     args:
       - push
       - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
-
-  # 3. 쿠버네티스에 이미지 반영
   - name: gcr.io/cloud-builders/kubectl
     args:
       - set
@@ -27,12 +20,6 @@ steps:
     env:
       - CLOUDSDK_COMPUTE_REGION=asia-northeast3
       - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
-
-substitutions:
-  _REGION: asia-northeast3
-
-options:
-  logging: CLOUD_LOGGING_ONLY
 
 images:
   - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA

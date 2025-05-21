@@ -1,7 +1,10 @@
 # 1단계: React 앱 빌드
 FROM node:18 AS builder
 WORKDIR /app/web
-COPY web ./              # code/web 폴더 복사
+
+# 루트가 컨텍스트이므로 web 폴더를 이렇게 복사
+COPY web ./       
+
 RUN npm install
 RUN npm run build
 
@@ -9,12 +12,16 @@ RUN npm run build
 FROM node:18
 WORKDIR /app
 
-COPY node/package*.json ./
+# 백엔드 package.json 복사
+COPY code/node/package*.json ./
+
 RUN npm install
 RUN npm install mysql
 
-COPY node/ .            # code/node 폴더 복사
+# 백엔드 코드 복사
+COPY code/node/ .    
 
+# 빌드된 React 앱 복사
 COPY --from=builder /app/web/build ./web/build
 
 EXPOSE 3000
