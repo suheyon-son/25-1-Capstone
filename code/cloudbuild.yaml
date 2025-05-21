@@ -1,0 +1,34 @@
+steps:
+  # 1. Docker 이미지 빌드
+  - name: docker/compose:1.29.0
+    args:
+      - -f
+      - docker-compose.k8s.prod.yaml
+      - build
+
+  # 2. 이미지 푸시
+  - name: docker/compose:1.29.0
+    args:
+      - -f
+      - docker-compose.k8s.prod.yaml
+      - push
+
+  # 3. 쿠버네티스 워크로드에 이미지 반영
+  - name: gcr.io/cloud-builders/kubectl
+    args:
+      - set
+      - image
+      - deployment/capstone-nestjs
+      - capstone-server=asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
+    env:
+      - CLOUDSDK_COMPUTE_REGION=asia-northeast3
+      - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
+
+substitutions:
+  _REGION: asia-northeast3
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+images:
+  - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
