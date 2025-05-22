@@ -38,9 +38,9 @@ function App() {
     <div className="App">
       <h1>Hellow World!</h1>
       <h3>이 문장이 보인다면 CI/CD 테스트가 성공한 것입니다.</h3>
-      <button onClick={callExpress}>Call Express</button><br/>
-      <button onClick={callFlaskDirect}>Call Flask Direct</button><br/>
-      <button onClick={callExpressToFlask}>Call Express to Flask</button><br/>
+      {showButton && <button onClick={callExpress}>Call Express</button>}<br/>
+      {showButton && <button onClick={callFlaskDirect}>Call Flask Direct</button>}<br/>
+      {showButton && <button onClick={callExpressToFlask}>Call Express to Flask</button>}<br/>
     </div>
   );
 }
