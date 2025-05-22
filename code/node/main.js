@@ -36,3 +36,18 @@ app.get(/^\/(?!api|static|assets).*/, (req, res) => {
 app.listen(3000, '0.0.0.0', () => {
   console.log('Express 앱이 3000번 포트에서 실행 중입니다.');
 });
+
+app.get('/api/express-endpoint', (req, res) => {
+  res.json({ message: 'Hello from Express!' });
+});
+
+app.get('/api/call-flask', async (req, res) => {
+  try{
+    const flaskRes = await fetch('http://capstone-ai-service:5000/api/flask-endpoint');
+    const data = await flaskRes.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Error calling Flask:', error);
+    res.status(500).json({ error: 'Error calling Flask' });
+  }
+});
