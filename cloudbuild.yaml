@@ -33,7 +33,7 @@ steps:
     args:
       - build
       - -t
-      - asia.gcr.io/steel-fin-459711-k9/capstone-flask:$SHORT_SHA
+      - asia.gcr.io/steel-fin-459711-k9/flask-ai-server:$SHORT_SHA
       - -f
       - code/python/Dockerfile
       - code/python
@@ -41,14 +41,14 @@ steps:
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - asia.gcr.io/steel-fin-459711-k9/capstone-flask:$SHORT_SHA
+      - asia.gcr.io/steel-fin-459711-k9/flask-ai-server:$SHORT_SHA
 
   - name: gcr.io/cloud-builders/kubectl
     args:
       - set
       - image
-      - deployment/capstone-flask
-      - capstone-flask-sha256-1=asia.gcr.io/steel-fin-459711-k9/capstone-flask:$SHORT_SHA
+      - deployment/capstone-ai
+      - flask-ai-server-sha256-1=asia.gcr.io/steel-fin-459711-k9/flask-ai-server:$SHORT_SHA
     env:
       - CLOUDSDK_COMPUTE_REGION=asia-northeast3
       - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
