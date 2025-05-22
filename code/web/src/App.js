@@ -4,24 +4,13 @@ import './App.css';
 function App() {
   const callExpress = async () => {
     try{
-      const res = await fetch('http://express-endpoint', {method: 'GET'});
+      const res = await fetch('/api/express-endpoint', {method: 'GET'});
       const data = await res.json();
       alert('Express response: ' + JSON.stringify(data));
     } catch (error) {
       alert('Error: ' + error.message);
     }
   };
-
-  const callFlaskDirect = async () => {
-    try{
-      const res = await fetch('http://capstone-ai-service:5000/api/flask-endpoint', { method: 'GET',});
-      const data = await res.json();
-      alert('Flask response: ' + JSON.stringify(data));
-    }
-    catch (error) {
-      alert('Error: ' + error.message);
-    }
-  }
 
   const callExpressToFlask = async () => {
     try{
@@ -38,9 +27,9 @@ function App() {
     <div className="App">
       <h1>Hellow World!</h1>
       <h3>이 문장이 보인다면 CI/CD 테스트가 성공한 것입니다.</h3>
-      {showButton && <button onClick={callExpress}>Call Express</button>}<br/>
-      {showButton && <button onClick={callFlaskDirect}>Call Flask Direct</button>}<br/>
-      {showButton && <button onClick={callExpressToFlask}>Call Express to Flask</button>}<br/>
+      <button onClick={callExpress}>Call Express</button><br/>
+      <button onClick={callFlaskDirect}>Call Flask Direct</button><br/>
+      <button onClick={callExpressToFlask}>Call Express to Flask</button><br/>
     </div>
   );
 }
