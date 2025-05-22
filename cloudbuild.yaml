@@ -1,4 +1,7 @@
 steps:
+  ##################################
+  # Express (Node + React) 빌드 및 배포
+  ##################################
   - name: gcr.io/cloud-builders/docker
     args:
       - build
@@ -7,10 +10,12 @@ steps:
       - -f
       - code/node/Dockerfile
       - .
+  
   - name: gcr.io/cloud-builders/docker
     args:
       - push
       - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
+
   - name: gcr.io/cloud-builders/kubectl
     args:
       - set
@@ -21,8 +26,36 @@ steps:
       - CLOUDSDK_COMPUTE_REGION=asia-northeast3
       - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
 
+  ##################################
+  # Flask (Python AI 서버) 빌드 및 배포
+  ##################################
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - asia.gcr.io/steel-fin-459711-k9/capstone-flask:$SHORT_SHA
+      - -f
+      - code/python/Dockerfile
+      - code/python
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - asia.gcr.io/steel-fin-459711-k9/capstone-flask:$SHORT_SHA
+
+  - name: gcr.io/cloud-builders/kubectl
+    args:
+      - set
+      - image
+      - deployment/capstone-flask
+      - capstone-flask-sha256-1=asia.gcr.io/steel-fin-459711-k9/capstone-flask:$SHORT_SHA
+    env:
+      - CLOUDSDK_COMPUTE_REGION=asia-northeast3
+      - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
+
 images:
   - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
+  - asia.gcr.io/steel-fin-459711-k9/capstone-flask:$SHORT_SHA
 
 options:
   logging: CLOUD_LOGGING_ONLY
