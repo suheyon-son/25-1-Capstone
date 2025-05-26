@@ -52,33 +52,33 @@ init().then(function(module){
 app.use('/static', express.static(path.join(__dirname, 'static')));
 
 
-app.get('/app/road', async (req, res) => {
+app.get('/api/road', async (req, res) => {
     const order = req.query.order || 'road'; // 기본값은 'road'
     let arr;
     if (order === 'road') {
         arr = await db.getData(`
-            SELECT road_id, road_name, road_type, road_length, road_width, road_date
-            FROM road
+            SELECT pothole.road_id, pothole_depth, pothole_width, road_danger, pothole_date
+            FROM pothole JOIN road ON pothole.road_id = road.road_id
             ORDER BY road_id DESC`);
     } else if (order === 'pothole') {
         arr = await db.getData(`
-            SELECT road_id, pothole_depth, pothole_width, road_danger, pothole_date
-            FROM pothole
+            SELECT pothole.road_id, pothole_depth, pothole_width, road_danger, pothole_date
+            FROM pothole JOIN road ON pothole.road_id = road.road_id
             ORDER BY pothole_id DESC`);
     } else if (order === 'danger') {
         arr = await db.getData(`
-            SELECT road_id, road_name, road_type, road_length, road_width, road_danger
-            FROM road
+            SELECT pothole.road_id, pothole_depth, pothole_width, road_danger, pothole_date
+            FROM pothole JOIN road ON pothole.road_id = road.road_id
             ORDER BY road_danger DESC`);
     } else if (order === 'length') {
         arr = await db.getData(`
-            SELECT road_id, road_name, road_type, road_length, road_width, road_date
-            FROM road
+            SELECT pothole.road_id, pothole_depth, pothole_width, road_danger, pothole_date
+            FROM pothole JOIN road ON pothole.road_id = road.road_id
             ORDER BY road_length DESC`);
     } else if (order === 'width') {
         arr = await db.getData(`
-            SELECT road_id, road_name, road_type, road_length, road_width, road_date
-            FROM road
+            SELECT pothole.road_id, pothole_depth, pothole_width, road_danger, pothole_date
+            FROM pothole JOIN road ON pothole.road_id = road.road_id
             ORDER BY road_width DESC`);
     } else {
         arr = [];
