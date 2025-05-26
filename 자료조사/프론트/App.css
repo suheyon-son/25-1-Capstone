@@ -1,0 +1,81 @@
+/* 전체 앱 레이아웃 */
+.app-container {
+  font-family: sans-serif;
+}
+
+/* 네비게이션 바 */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #174F87;
+  padding: 10px 20px;
+  color: white;
+  position: relative;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* 햄버거 버튼: 항상 보이게 함 */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 25px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  background-color: white;
+  height: 3px;
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 햄버거가 열린 상태에서 X자 형태 */
+.hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translateY(8px);
+}
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translateY(-8px);
+}
+
+/* 메뉴 버튼들: 기본은 숨김 */
+.nav-buttons {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  flex-direction: column;
+  background-color: #282c34;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.nav-buttons.active {
+  display: flex;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.nav-button:hover {
+  background-color: #444;
+  border-radius: 4px;
+}
+
