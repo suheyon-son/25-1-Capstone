@@ -1,53 +1,27 @@
-const express = require('express');
-const mysql = require('mysql');
 const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
-const connection = mysql.createConnection({
-  host: 'my-database.suhyeon.xyz',
-  user: 'root',
-  password: '1234',
-  database: 'capstone'
-});
+const express = require('express');
+const cors = require('cors');
 
-connection.connect((err) => {
-  if (err) {
-    console.error('DB 연결 실패:', err);
-    return;
-  }
-  console.log('Cloud SQL에 연결되었습니다.');
-});
+require('./database/db'); // DB 연결
+const routes = require('./route/routes');
 
 const app = express();
 
-// React 정적 파일 서빙
+// ✅ CORS 미들웨어를 라우터보다 먼저 적용
+app.use(cors({
+  origin: 'http://localhost:3000', // 또는 '*' 개발용 전체 허용
+  credentials: true,
+}));
+
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'web', 'build')));
+app.use(routes);
 
-// API 예제
-app.get('/api/hello', (req, res) => {
-  res.json({ message: '안녕하세요!' });
-});
-
-// React 라우팅 지원
-app.get(/^\/(?!api|static|assets).*/, (req, res) => {
-  res.sendFile(path.join(__dirname, 'web', 'build', 'index.html'));
-});
+const PORT = process.env.PORT;
 
 // 서버 실행
-app.listen(3000, '0.0.0.0', () => {
-  console.log('Express 앱이 3000번 포트에서 실행 중입니다.');
-});
-
-app.get('/api/express-endpoint', (req, res) => {
-  res.json({ message: 'Hello from Express!' });
-});
-
-app.get('/api/call-flask', async (req, res) => {
-  try{
-    const flaskRes = await fetch('http://capstone-ai-service:5000/api/flask-endpoint');
-    const data = await flaskRes.json();
-    res.json(data);
-  } catch (error) {
-    console.error('Error calling Flask:', error);
-    res.status(500).json({ error: 'Error calling Flask' });
-  }
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Express 앱이 ${PORT}번 포트에서 실행 중입니다.`);
 });

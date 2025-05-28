@@ -1,34 +1,55 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import PotholeQueryPage from './component/PotholeQueryPage.tsx';
+import RoadAnalysis from './component/RoadAnalysis.jsx';
+import PotholeMapPage from './component/PotholeMapPage.jsx';
+
 import './App.css';
 
 function App() {
-  const callExpress = async () => {
-    try{
-      const res = await fetch('/api/express-endpoint', {method: 'GET'});
-      const data = await res.json();
-      alert('Express response: ' + JSON.stringify(data));
-    } catch (error) {
-      alert('Error: ' + error.message);
+  const [currentPage, setCurrentPage] = useState('pothole');
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'pothole':
+        return <PotholeQueryPage />;
+      case 'road':
+        return <RoadAnalysis />;
+      case 'map':
+        return <PotholeMapPage />;
+      default:
+        return <PotholeQueryPage />;
     }
   };
 
-  const callExpressToFlask = async () => {
-    try{
-      const res = await fetch('api/call-flask', { method: 'GET'});
-      const data = await res.json();
-      alert('Express to Flask response: ' + JSON.stringify(data));
-    }
-    catch (error) {
-      alert('Error: ' + error.message);
-    }
-  }
+  const handleNavClick = (page) => {
+    setCurrentPage(page);
+    setMenuOpen(false); // 메뉴 선택 시 자동 닫힘
+  };
 
   return (
-    <div className="App">
-      <h1>Hellow World!</h1>
-      <h3>이 문장이 보인다면 CI/CD 테스트가 성공한 것입니다.</h3>
-      <button onClick={callExpress}>Call Express</button><br/>
-      <button onClick={callExpressToFlask}>Call Express to Flask</button><br/>
+    <div className="app-container">
+      {/* 상단 네비게이션 바 */}
+      <div className="navbar">
+        <span className="logo">Hole In One Q</span>
+
+        <div className={`hamburger ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(!menuOpen)}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div className={`nav-buttons ${menuOpen ? 'active' : ''}`}>
+          <button onClick={() => handleNavClick('pothole')} className="nav-button">포트홀 분석</button>
+          <button onClick={() => handleNavClick('road')} className="nav-button">도로 분석</button>
+          <button onClick={() => handleNavClick('map')} className="nav-button">포트홀 지도</button>
+        </div>
+      </div>
+
+      {/* 현재 페이지 렌더링 */}
+      <div className="page-container">
+        {renderPage()}
+      </div>
     </div>
   );
 }
