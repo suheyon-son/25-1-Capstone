@@ -61,7 +61,7 @@ router.post('api/send-image', async (req, res) => {
       ?, ?, ?
     )`,
     // 쿼리 미완성 : 실제 쿼리 작성 필요
-    values: [longitude, longitude, depth, width, danger, image_path],
+    values: [latitude, longitude, depth, width, danger, image_path],
   }, (err, results) => {
     if (err) {
       return res.status(500).json({message: 'fail', error: err.message});
