@@ -203,7 +203,7 @@ router.get('/api/roadSearch', (req, res) => {
 });
 
 // ✅ React SPA 라우팅
-router.get(/^\/(?!api|static|assets).*/, (req, res) => {
+router.get(/^\/(?!api|static|assets|images).*/, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'web', 'build', 'index.html'));
 });
 
