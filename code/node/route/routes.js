@@ -36,12 +36,22 @@ router.post('api/send-image', async (req, res) => {
   const body = req.body;
   const pothole_info = JSON.parse(req.headers['pothole_info']);
   const image_path = "/images/20250529_hash";
-  const [] = pothole_info;
+  const [latitude, longitude] = pothole_info;
+  const depth = null; // 포트홀 깊이 정보를 서버에서 처리하고 받을지 모름
+  const width = null; // 포트홀 너비 정보를 서버에서 처리하고 받을지 모름
+  const danger = null; // 포트홀 위험도 정보를 서버에서 처리하고 받을지 모름
   // 이미지에 대한 추가 처리가 가능합니다.
   fs.writeFileSync(".."+image_path, body.image);
   connection.query({
-    sql : `INSERT INTO pothole () VALUES ()`, // 실제 쿼리 작성 필요
-    values: [image_path],
+    sql : `INSERT INTO pothole (
+      road_id, pothole_latitude, pothole_longitude,
+      pothole_depth, pothole_width, pothole_danger
+    ) VALUES (
+      NULL, ?, ?,
+      ?, ?, ?
+    )`,
+    // 쿼리 미완성 : 실제 쿼리 작성 필요
+    values: [longitude, longitude, depth, width, danger, image_path],
   }, (err, results) => {
     if (err) {
       return res.status(500).json({message: 'fail', error: err.message});
