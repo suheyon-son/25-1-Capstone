@@ -3,6 +3,7 @@ const path = require('path');
 const connection = require('../database/db'); // DB 연결
 const query = require('../database/query');   // 쿼리 함수
 const fs = require('fs');
+const crypto = require('crypto');
 require('dotenv').config();
 
 const router = express.Router();
@@ -30,12 +31,21 @@ router.get('/api/call-flask', async (req, res) => {
 });
 
 
+const getRandomFilename = function(){
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const hash = crypto.randomBytes(32).toString('hex');
+  return `${yyyy}${mm}${dd}_${hash}`;
+}
+
 // ✅ 포트홀 정보 저장 API
 // 이미지 업로드를 위한 POST 요청
 router.post('api/send-image', async (req, res) => {
   const body = req.body;
   const pothole_info = JSON.parse(req.headers['pothole_info']);
-  const image_path = "/images/20250529_hash";
+  const image_path = getRandomFilename();
   const [latitude, longitude] = pothole_info;
   const depth = null; // 포트홀 깊이 정보를 서버에서 처리하고 받을지 모름
   const width = null; // 포트홀 너비 정보를 서버에서 처리하고 받을지 모름
