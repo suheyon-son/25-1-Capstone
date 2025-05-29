@@ -16,7 +16,10 @@ WORKDIR /app
 COPY code/node/package*.json ./
 
 RUN npm install
-RUN npm install mysql
+RUN npm install mysql2
+RUN npm install express
+RUN npm install cors
+RUN npm install dotenv
 
 # 백엔드 코드 복사
 COPY code/node/ .    
