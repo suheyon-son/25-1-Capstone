@@ -5,3 +5,5 @@ services:
       context: ./
       dockerfile: node/Dockerfile
     image: asia.gcr.io/steel-fin-459711-k9/capstone-server:0.1
+    env_file:
+      - .env
