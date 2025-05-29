@@ -1,0 +1,126 @@
+.pmp4-root {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: #e5e5e5;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.pmp4-root.no-header-bg,
+.pmp4-body.no-header-bg {
+  background: none;
+  margin: 0;
+  padding: 0;
+}
+.pmp4-header,
+.pmp4-header.no-title,
+.pmp4-header.no-header-bg {
+  display: none;
+}
+.pmp4-body {
+  display: flex;
+  height: calc(100vh - 38px); /* 38px footer */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.pmp4-sidebar {
+  width: 230px;
+  min-width: 170px;
+  background: #dae6f2;
+  padding: 10px 8px 0 8px;
+  border-right: 1px solid #c2d3e3;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  height: 100%;
+}
+.pmp4-section,
+.form-row {
+  margin-bottom: 4px;
+  display: flex;
+  flex-direction: column;
+}
+.pmp4-label {
+text-align: left;  /* 라벨도 왼쪽 정렬 */
+}
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 2px;
+  padding-right: 0; /* 오른쪽 여백이 있다면 0으로 */
+  padding-left: 0;  /* 필요시 좌측 여백도 0으로 */
+}
+.pmp4-select,
+.pmp4-sidebar input[type="text"] {
+  width: 100%;      /* 부모의 100%를 차지 */
+  box-sizing: border-box;
+  padding: 5px 7px;
+  margin-bottom: 2px;
+  margin-right: 0;  /* 오른쪽 마진 없음 */
+}
+.pmp4-sidebar label {
+  font-size: 0.96rem;
+  margin-bottom: 1px;
+}
+.pmp4-confirm-btn {
+  width: 100%;
+  margin-top: 6px;
+  padding: 7px 0;
+  background: #174F87;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.02rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+.pmp4-confirm-btn:hover {
+  background: #2865a3;
+  color: #e2eaf3;
+}
+.pmp4-maparea {
+  flex: 1;
+  position: relative;
+  background: #d1ead4;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+.pmp4-mapbg {
+  width: 100%;
+  height: 100%;
+  min-height: 0px;
+  position: relative;
+  background: linear-gradient(135deg, #e8f4f0 0%, #d4edda 50%, #c3e6cb 100%);
+  overflow: hidden;
+}
+.pmp4-region-label {
+  position: absolute;
+  top: 80px;
+  left: 320px;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #888;
+  opacity: 0.8;
+  z-index: 2;
+  letter-spacing: -1.5px;
+}
+.pmp4-footer {
+  background: #174F87;
+  color: #fff;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 5px 50px;
+  text-align: right;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: auto; /* 푸터를 아래로 밀어줌 */
+  box-sizing: border-box;
+}
