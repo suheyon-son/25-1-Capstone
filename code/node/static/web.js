@@ -14,10 +14,10 @@ const createMarker = (x, y) => {
         position: position,
         map: map,
         icon: {
-            url: './img/pin_default.png',
-            size: new naver.maps.Size(22, 35),
+            url: '/static/maker.png',
+            size: new naver.maps.Size(16, 16),
             origin: new naver.maps.Point(0, 0),
-            anchor: new naver.maps.Point(11, 35)
+            anchor: new naver.maps.Point(0, 0)
         }
     };
 
