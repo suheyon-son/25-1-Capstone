@@ -11,7 +11,7 @@ const app = express();
 
 // ✅ CORS 미들웨어를 라우터보다 먼저 적용
 app.use(cors({
-  origin: 'http://localhost:3000', // 또는 '*' 개발용 전체 허용
+  origin: 'https://suhyeon.xyz', // 또는 '*' 개발용 전체 허용
   credentials: true,
 }));
 

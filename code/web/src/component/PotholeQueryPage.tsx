@@ -28,7 +28,7 @@ const RoadAnalysis = () => {
   const fetchData = (query = "", field = "") => {
     const params = query && field ? { field, query } : {};
     axios
-      .get("http://localhost:8000/api/roadSearch", { params })
+      .get(`${process.env.REACT_APP_API_URL}/api/roadSearch`, { params })
       .then((res) => {
         const transformed = res.data.map((item) => ({
           roadName: item.roadname_roadname,

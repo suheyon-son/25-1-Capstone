@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const handleSearch = async ({ filters, mapInstance, createMarker, clearMarkers }) => {
     try {
-        const response = await axios.get('http://localhost:8000/api/pothole-location', {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/pothole-location`, {
             params: filters,
         });
         

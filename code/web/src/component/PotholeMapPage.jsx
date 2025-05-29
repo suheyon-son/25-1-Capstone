@@ -26,16 +26,16 @@ const PotholeMapPage = () => {
   const mapPageRef = useRef(null);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/sido').then(res => setSidoList(res.data));
+    axios.get(`${process.env.REACT_APP_API_URL}/api/sido`).then(res => setSidoList(res.data));
   }, []);
 
   useEffect(() => {
     if (selectedSido) {
-      axios.get(`http://localhost:8000/api/sigungu/${selectedSido}`).then((res) => {
+      axios.get(`${process.env.REACT_APP_API_URL}/api/sigungu/${selectedSido}`).then((res) => {
         const data = res.data;
 
         if (data.length === 0) {
-          axios.get(`http://localhost:8000/api/emd/${selectedSido}`)
+          axios.get(`${process.env.REACT_APP_API_URL}/api/emd/${selectedSido}`)
             .then((res) => setEmdList(res.data))
             .catch((err) => console.error(err));
 
@@ -50,7 +50,7 @@ const PotholeMapPage = () => {
 
   useEffect(() => {
     if (selectedSido && selectedSigungu) {
-      axios.get(`http://localhost:8000/api/emd/${selectedSido}/${selectedSigungu}`)
+      axios.get(`${process.env.REACT_APP_API_URL}/api/emd/${selectedSido}/${selectedSigungu}`)
         .then(res => setEmdList(res.data))
         .catch(err => console.error(err));
     }
@@ -58,11 +58,11 @@ const PotholeMapPage = () => {
 
   useEffect(() => {
     if (selectedSido && selectedSigungu && selectedEmd) {
-      axios.get(`http://localhost:8000/api/roadname/${selectedSido}/${selectedSigungu}/${selectedEmd}`)
+      axios.get(`${process.env.REACT_APP_API_URL}/api/roadname/${selectedSido}/${selectedSigungu}/${selectedEmd}`)
         .then(res => setRoadList(res.data));
     }
     else if (selectedSido && selectedEmd) {
-      axios.get(`http://localhost:8000/api/roadname/${selectedSido}/${selectedEmd}`)
+      axios.get(`${process.env.REACT_APP_API_URL}/api/roadname/${selectedSido}/${selectedEmd}`)
         .then(res => setRoadList(res.data));
     }
   }, [selectedSido, selectedSigungu, selectedEmd]);
