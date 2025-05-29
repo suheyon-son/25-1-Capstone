@@ -40,7 +40,7 @@ router.post('api/send-image', async (req, res) => {
   // 이미지에 대한 추가 처리가 가능합니다.
   fs.writeFileSync(".."+image_path, body.image);
   connection.query({
-    sql : `저장 쿼리...`,
+    sql : `INSERT INTO pothole () VALUES ()`, // 실제 쿼리 작성 필요
     values: [image_path],
   }, (err, results) => {
     if (err) {
