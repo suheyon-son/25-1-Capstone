@@ -12,6 +12,11 @@ async function runMigration() {
     database: process.env.DATABASE_DATABASE
   });
 
+  await connection.query(`DROP TABLE IF EXISTS pothole`);
+  await connection.query(`DROP TABLE IF EXISTS road`);
+  await connection.query(`DROP TABLE IF EXISTS roadname`);
+
+
   // 테이블 생성 쿼리를 하나씩 실행
   const createTableQueries = [
     `CREATE TABLE IF NOT EXISTS roadname (
@@ -100,3 +105,5 @@ async function runMigration() {
 runMigration().catch((err) => {
   console.error('❌ 마이그레이션 실패:', err);
 });
+
+module.exports = runMigration;

@@ -26,11 +26,10 @@ const PORT = process.env.PORT;
 async function startServer() {
   try {
     console.log('마이그레이션 시작...');
-    await runMigration();
+    await runMigration(); // ✅ 이제 정상 작동
     console.log('마이그레이션 완료');
   } catch (err) {
     console.error('마이그레이션 실패:', err);
-    // 마이그레이션 실패해도 서버는 계속 실행하도록 설정
   }
 
   app.listen(PORT, '0.0.0.0', () => {
