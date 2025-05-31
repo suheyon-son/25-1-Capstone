@@ -20,6 +20,7 @@ RUN npm install
 RUN npm install mysql2
 RUN npm install csv-parser
 RUN npm install express
+RUN npm install iconv-lite
 RUN npm install cors
 RUN npm install dotenv
 RUN npm install multer
