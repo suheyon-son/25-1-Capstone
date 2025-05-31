@@ -6,6 +6,7 @@ WORKDIR /app/web
 COPY code/web ./       
 
 RUN npm install
+ENV REACT_APP_API_URL=""
 RUN npm run build
 
 # 2단계: Express 백엔드 실행
@@ -20,6 +21,8 @@ RUN npm install mysql2
 RUN npm install express
 RUN npm install cors
 RUN npm install dotenv
+RUN npm install multer
+RUN npm install multer-google-storage
 
 # 백엔드 코드 복사
 COPY code/node/ .    
