@@ -1,5 +1,5 @@
 #!/bin/bash
-node migrate.js
+node database/migrate.js
 
 if [ $? -eq 0 ]; then
   echo "Migration success, starting main.js"
