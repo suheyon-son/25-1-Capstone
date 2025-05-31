@@ -20,7 +20,33 @@ async function runMigration() {
       roadname_roadname VARCHAR(30) NOT NULL,
       PRIMARY KEY (roadname_id)
     );
+
+    CREATE TABLE IF NOT EXISTS road (
+      road_id INT NOT NULL,
+      roadname_id INT NOT NULL,
+      road_lastdate DATE NULL,
+      road_lastfixdate DATE NULL,
+      road_danger FLOAT NULL,
+      road_count INT NULL,
+      road_state INT NULL,
+      PRIMARY KEY (road_id),
+      FOREIGN KEY (roadname_id) REFERENCES roadname (roadname_id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS pothole(
+      pothole_id INT  NOT NULL AUTO_INCREMENT,
+      road_id INT NOT NULL,
+      pothole_depth FLOAT NOT NULL,
+      pothole_width FLOAT NOT NULL,
+      pothole_latitude DOUBLE NOT NULL,
+      pothole_longitude DOUBLE NOT NULL,
+      pothole_date DATE NOT NULL,
+      pothole_url VARCHAR(100),
+      PRIMARY KEY (pothole_id),
+      FOREIGN KEY (road_id) REFERENCES road (road_id) ON DELETE CASCADE
+    );
   `;
+
   await connection.execute(createRoadnameTableSQL);
 
   const csvFilePath = path.resolve(__dirname, 'roadname_data.csv');
@@ -58,3 +84,5 @@ runMigration().catch((err) => {
   console.error('마이그레이션 실패:', err);
   process.exit(1);
 });
+
+module.exports = runMigration;

@@ -32,4 +32,4 @@ COPY code/node/ .
 COPY --from=builder /app/web/build ./web/build
 
 EXPOSE 3000
-CMD ["./start.sh"]
+CMD ["node", "main.js"]
