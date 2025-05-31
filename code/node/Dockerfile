@@ -18,6 +18,7 @@ COPY code/node/package*.json ./
 
 RUN npm install
 RUN npm install mysql2
+RUN npm install csv-parser
 RUN npm install express
 RUN npm install cors
 RUN npm install dotenv
@@ -31,4 +32,4 @@ COPY code/node/ .
 COPY --from=builder /app/web/build ./web/build
 
 EXPOSE 3000
-CMD ["node", "main.js"]
+CMD ["./start.sh"]
