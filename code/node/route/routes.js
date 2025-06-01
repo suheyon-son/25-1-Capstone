@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const multer = require('multer');
-const multerGoogleStorage = require('multer-google-storage');
+const { multerGoogleStorage } = require('multer-google-storage');
 const connection = require('../database/db'); // DB 연결
 const query = require('../database/query');   // 쿼리 함수
 require('dotenv').config();
@@ -11,19 +11,21 @@ const router = express.Router();
 
 const gcpKey = JSON.parse(Buffer.from(process.env.GCP_SA_KEY_BASE64, 'base64').toString('utf-8'));
 
-const storage = multerGoogleStorage({
-  bucket: process.env.GOOGLE_CLOUD_STORAGE_BUCKET,
-  projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
-  credentials: gcpKey,
-  filename: (req, file, cb) => {
-    cb(null, `pothole/${Date.now()}-${file.originalname}`);
-  },
-});
-
-const upload = multer({
-  storage,
+const storage = multer({
+  storage: multerGoogleStorage({
+    bucket: process.env.GOOGLE_CLOUD_STORAGE_BUCKET,
+    projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
+    credentials: gcpKey,
+    destination: 'pothole/', // destination도 지정 가능
+    acl: 'publicRead', // GCS에 공개 URL로 접근 가능하게
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  }),
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB 제한
 });
+
+const upload = storage; // 기존 multer 객체 이름 그대로 유지
 
 function saveImageRecord(data) {
   return new Promise((resolve, reject) => {
