@@ -28,7 +28,6 @@ const upload = multer({
 function saveImageRecord(data) {
   return new Promise((resolve, reject) => {
     const sql = query.insertPothole();
-
     const values = [
       data.road_id,
       data.pothole_depth,
@@ -38,7 +37,6 @@ function saveImageRecord(data) {
       data.pothole_date,
       data.pothole_url,
     ];
-
     db.query(sql, values, (err, results) => {
       if (err) return reject(err);
       resolve(results);
