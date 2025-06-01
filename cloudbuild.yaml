@@ -1,5 +1,18 @@
 steps:
   #############################################
+  # 0. GKE 클러스터 인증 설정
+  #############################################
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "🔑 Getting GKE cluster credentials..."
+        gcloud container clusters get-credentials autopilot-cluster-1 \
+          --region asia-northeast3 \
+          --project steel-fin-459711-k9
+
+  #############################################
   # 1. GCP 서비스 계정 키 Secret 생성
   #############################################
   - name: 'gcr.io/cloud-builders/kubectl'
@@ -9,7 +22,7 @@ steps:
       - |
         echo "🔐 Creating Kubernetes Secret for GCP key..."
 
-        # 기존 secret 삭제
+        # 기존 secret 삭제 (있으면)
         kubectl delete secret capstone-secrets --ignore-not-found
 
         # Secret 생성
@@ -19,8 +32,6 @@ steps:
           --from-literal=GOOGLE_CLOUD_PROJECT_ID="steel-fin-459711-k9" \
           --from-literal=KAKAO_API_KEY="1e1e4cdde8201f18aacae19257f3fffa"
     env:
-      - CLOUDSDK_COMPUTE_REGION=asia-northeast3
-      - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
       - _GCP_SA_KEY=${_GCP_SA_KEY}
 
   #############################################
@@ -75,6 +86,11 @@ steps:
       - flask-ai-server-sha256-1=asia.gcr.io/steel-fin-459711-k9/capstone-flask:$SHORT_SHA
     env:
       - CLOUDSDK_COMPUTE_REGION=asia-northeast3
-      - CLOUDSDK_CONTAINER_CLUSTER=
+      - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
+
+images:
+  - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
+  - asia.gcr.io/steel-fin-459711-k9/capstone-flask:$SHORT_SHA
+
 options:
   logging: CLOUD_LOGGING_ONLY
