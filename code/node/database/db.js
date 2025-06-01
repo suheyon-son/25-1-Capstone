@@ -2,14 +2,6 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 const mysql = require('mysql2');
 
-// 필수 환경변수 확인
-const requiredEnv = ['DATABASE_HOST', 'DATABASE_USERNAME', 'DATABASE_PASSWORD', 'DATABASE_DATABASE'];
-requiredEnv.forEach((key) => {
-  if (!process.env[key]) {
-    throw new Error(`환경변수 ${key}가 설정되지 않았습니다.`);
-  }
-});
-
 // DB 연결
 const connection = mysql.createConnection({
   host: process.env.DATABASE_HOST,
