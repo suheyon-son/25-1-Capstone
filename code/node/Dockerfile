@@ -13,19 +13,11 @@ RUN npm run build
 FROM node:18
 WORKDIR /app
 
-# 백엔드 package.json 복사
+# 백엔드 package.json, package-lock.json 복사 (있으면 반드시 복사)
 COPY code/node/package*.json ./
 
+# 한 번만 npm install 실행 (필요한 모든 패키지는 package.json에 포함되어 있어야 함)
 RUN npm install
-RUN npm install mysql2
-RUN npm install csv-parser
-RUN npm install express
-RUN npm install iconv-lite
-RUN npm install cors
-RUN npm install dotenv
-RUN npm install multer
-RUN npm install @google-cloud/storage
-RUN npm install date-fns
 
 # 백엔드 코드 복사
 COPY code/node/ .    
