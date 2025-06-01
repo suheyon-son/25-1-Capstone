@@ -33,7 +33,7 @@ async function runMigration() {
       PRIMARY KEY (roadname_id)
     )`,
     `CREATE TABLE IF NOT EXISTS road (
-      road_id INT NOT NULL,
+      road_id INT NOT NULL AUTO_INCREMENT,
       roadname_id INT NOT NULL,
       road_lastdate DATE NULL,
       road_lastfixdate DATE NULL,
@@ -113,9 +113,5 @@ async function runMigration() {
   console.log('✅ roadname 테이블 마이그레이션 완료');
   await connection.end();
 }
-
-runMigration().catch((err) => {
-  console.error('❌ 마이그레이션 실패:', err);
-});
 
 module.exports = runMigration;

@@ -25,6 +25,7 @@ RUN npm install cors
 RUN npm install dotenv
 RUN npm install multer
 RUN npm install @google-cloud/storage
+RUN npm install date-fns
 
 # 백엔드 코드 복사
 COPY code/node/ .    

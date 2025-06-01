@@ -1,7 +1,10 @@
 {
   "dependencies": {
+    "@google-cloud/storage": "^7.16.0",
     "cors": "^2.8.5",
     "csv-parser": "^3.2.0",
+    "data-fns": "^1.1.0",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "iconv-lite": "^0.6.3",
