@@ -1,7 +1,47 @@
 steps:
-  ##################################
-  # Express (Node + React) 빌드 및 배포
-  ##################################
+  #############################################
+  # 0. Base64 인코딩된 GCP 서비스 계정 키 만들기 (SecretManager에서 불러와서 인코딩)
+  #############################################
+  - name: 'ubuntu'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo -n "$GCP_SA_KEY" | base64 -w 0 > key.base64
+
+  #############################################
+  # 1. 기존 Secret 삭제 (있으면 삭제)
+  #############################################
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - delete
+      - secret
+      - capstone-secrets
+      - --ignore-not-found
+    env:
+      - CLOUDSDK_COMPUTE_REGION=asia-northeast3
+      - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
+
+  #############################################
+  # 2. Secret 새로 생성 (Base64 인코딩된 서비스계정키 포함 4가지)
+  #############################################
+  - name: 'gcr.io/cloud-builders/kubectl'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        kubectl create secret generic capstone-secrets \
+          --from-literal=GCP_SA_KEY_BASE64="$(cat key.base64)" \
+          --from-literal=GOOGLE_CLOUD_STORAGE_BUCKET="steel-fin-459711-k9-01424cceaf04" \
+          --from-literal=GOOGLE_CLOUD_PROJECT_ID="steel-fin-459711-k9" \
+          --from-literal=KAKAO_API_KEY="1e1e4cdde8201f18aacae19257f3fffa"
+    env:
+      - CLOUDSDK_COMPUTE_REGION=asia-northeast3
+      - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
+
+  #############################################
+  # 3. Express (Node.js 서버) 빌드 및 배포
+  #############################################
   - name: gcr.io/cloud-builders/docker
     args:
       - build
@@ -10,7 +50,7 @@ steps:
       - -f
       - code/node/Dockerfile
       - .
-  
+
   - name: gcr.io/cloud-builders/docker
     args:
       - push
@@ -26,9 +66,9 @@ steps:
       - CLOUDSDK_COMPUTE_REGION=asia-northeast3
       - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
 
-  ##################################
-  # Flask (Python AI 서버) 빌드 및 배포
-  ##################################
+  #############################################
+  # 4. Flask (Python AI 서버) 빌드 및 배포
+  #############################################
   - name: gcr.io/cloud-builders/docker
     args:
       - build
@@ -59,3 +99,8 @@ images:
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/steel-fin-459711-k9/secrets/gcp-storage-key/versions/latest
+      env: GCP_SA_KEY

@@ -12,12 +12,12 @@ async function runMigration() {
     database: process.env.DATABASE_DATABASE
   });
 
+  // 기존 테이블 삭제
   await connection.query(`DROP TABLE IF EXISTS pothole`);
   await connection.query(`DROP TABLE IF EXISTS road`);
   await connection.query(`DROP TABLE IF EXISTS roadname`);
 
-
-  // 테이블 생성 쿼리를 하나씩 실행
+  // 새 테이블 생성
   const createTableQueries = [
     `CREATE TABLE IF NOT EXISTS roadname (
       roadname_id INT NOT NULL,
@@ -25,9 +25,13 @@ async function runMigration() {
       roadname_sigungu VARCHAR(30) NOT NULL,
       roadname_emd VARCHAR(30) NOT NULL,
       roadname_roadname VARCHAR(30) NOT NULL,
+      jibun_sido VARCHAR(30) NOT NULL,
+      jibun_sigungu VARCHAR(30) NOT NULL,
+      jibun_emd VARCHAR(30) NOT NULL,
+      jibun_other VARCHAR(30) NOT NULL,
+      jibun_number VARCHAR(30) NOT NULL,
       PRIMARY KEY (roadname_id)
     )`,
-
     `CREATE TABLE IF NOT EXISTS road (
       road_id INT NOT NULL,
       roadname_id INT NOT NULL,
@@ -36,10 +40,10 @@ async function runMigration() {
       road_danger FLOAT NULL,
       road_count INT NULL,
       road_state INT NULL,
+      road_url VARCHAR(100) NULL,
       PRIMARY KEY (road_id),
       FOREIGN KEY (roadname_id) REFERENCES roadname (roadname_id) ON DELETE CASCADE
     )`,
-
     `CREATE TABLE IF NOT EXISTS pothole (
       pothole_id INT NOT NULL AUTO_INCREMENT,
       road_id INT NOT NULL,
@@ -58,17 +62,17 @@ async function runMigration() {
     await connection.query(query);
   }
 
-  // 마지막 roadname_id가 184124 이상 있으면 마이그레이션 건너뜀
+  // 이미 1048575 이상이면 건너뜀
   const [rows] = await connection.query(
-    `SELECT COUNT(*) as count FROM roadname WHERE roadname_id = 184124`
+    `SELECT COUNT(*) as count FROM roadname WHERE roadname_id >= 1048575`
   );
   if (rows[0].count > 0) {
-    console.log('🟡 roadname_id 184124가 이미 존재합니다. 마이그레이션을 건너뜁니다.');
+    console.log('🟡 roadname_id 1048575 이상이 이미 존재합니다. 마이그레이션을 건너뜁니다.');
     await connection.end();
     return;
   }
 
-  // CP949로 인코딩된 CSV 읽기
+  // CSV 데이터 읽기
   const csvFilePath = path.resolve(__dirname, 'roadname_data.csv');
   const csvData = [];
 
@@ -84,16 +88,24 @@ async function runMigration() {
   for (const row of csvData) {
     if (!row.roadname_id || isNaN(row.roadname_id)) continue;
 
-    const values = [
-      parseInt(row.roadname_id, 10),
-      row.roadname_sido?.trim() || '',
-      row.roadname_sigungu?.trim() || '',
-      row.roadname_emd?.trim() || '',
-      row.roadname_roadname?.trim() || ''
-    ];
+  const values = [
+    parseInt(row.roadname_id, 10),
+    row.roadname_sido?.trim() || '',
+    row.roadname_sigungu?.trim() || '',
+    row.roadname_emd?.trim() || '',
+    row.roadname_roadname?.trim() || '',
+    row.jibun_sido?.trim() || '',
+    row.jibun_sigungu?.trim() || '',
+    row.jibun_emd?.trim() || '',
+    row.jibun_other?.trim() || '',
+    row.jibun_number?.trim() || ''
+  ];
 
     await connection.execute(
-      `INSERT IGNORE INTO roadname (roadname_id, roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname) VALUES (?, ?, ?, ?, ?)`,
+      `INSERT IGNORE INTO roadname (
+        roadname_id, roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname,
+        jibun_sido, jibun_sigungu, jibun_emd, jibun_other, jibun_number
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       values
     );
   }

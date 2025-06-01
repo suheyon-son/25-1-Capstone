@@ -1,10 +1,50 @@
 const express = require('express');
 const path = require('path');
+const multer = require('multer');
+const multerGoogleStorage = require('multer-google-storage');
 const connection = require('../database/db'); // DB 연결
 const query = require('../database/query');   // 쿼리 함수
 require('dotenv').config();
+const roadaddr = require('../route/roadaddr'); // 주소 변환 모듈
 
 const router = express.Router();
+
+const gcpKey = JSON.parse(Buffer.from(process.env.GCP_SA_KEY_BASE64, 'base64').toString('utf-8'));
+
+const storage = multerGoogleStorage({
+  bucket: process.env.GOOGLE_CLOUD_STORAGE_BUCKET,
+  projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
+  credentials: gcpKey,
+  filename: (req, file, cb) => {
+    cb(null, `pothole/${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB 제한
+});
+
+function saveImageRecord(data) {
+  return new Promise((resolve, reject) => {
+    const sql = query.insertPothole();
+
+    const values = [
+      data.road_id,
+      data.pothole_depth,
+      data.pothole_width,
+      data.pothole_latitude,
+      data.pothole_longitude,
+      data.pothole_date,
+      data.pothole_url,
+    ];
+
+    db.query(sql, values, (err, results) => {
+      if (err) return reject(err);
+      resolve(results);
+    });
+  });
+}
 
 // ✅ 기본 API 예제
 router.get('/api/hello', (req, res) => {
@@ -156,6 +196,89 @@ router.get('/api/roadSearch', (req, res) => {
       if (err) return res.status(500).json({ error: err });
       res.json(results);
   });
+});
+
+// 포트홀 이미지 업로드 API
+router.post('/api/upload', upload.single('file'), async (req, res) => {
+  const connection = await getConnection(); // 커넥션 생성
+  try {
+    if (!req.file) return res.status(400).json({ error: '파일이 없습니다.' });
+
+    const { pothole_depth, pothole_width, pothole_latitude, pothole_longitude, pothole_date } = req.body;
+    if (!pothole_depth || !pothole_width || !pothole_latitude || !pothole_longitude || !pothole_date) {
+      return res.status(400).json({ error: '필수 정보가 누락되었습니다.' });
+    }
+
+    const filename = req.file.filename;
+    const fileUrl = `https://storage.googleapis.com/${process.env.GOOGLE_CLOUD_STORAGE_BUCKET}/${filename}`;
+    const { roadAddress, jibunAddress } = await roadaddr.getRoadAddress(pothole_longitude, pothole_latitude);
+
+    let roadnameId = null;
+
+    // 1. 도로명 주소 기반 roadname_id 찾기
+    if (roadAddress) {
+      const { sql, values } = findRoadnameIdByRoadAddress(roadAddress);
+      const [rows] = await connection.query(sql, values);
+      if (rows.length > 0) roadnameId = rows[0].roadname_id;
+    }
+
+    // 2. 도로명 주소가 없거나 못 찾았으면 지번 주소로 대체
+    if (!roadnameId && jibunAddress) {
+      const jibunQuery = findRoadIdByJibunAddress(jibunAddress);
+      if (jibunQuery) {
+        const [rows] = await connection.query(jibunQuery.sql, jibunQuery.values);
+        if (rows.length > 0) {
+          const [roadRow] = await connection.query(`SELECT roadname_id FROM road WHERE road_id = ?`, [rows[0].road_id]);
+          if (roadRow.length > 0) roadnameId = roadRow[0].roadname_id;
+        }
+      }
+    }
+
+    if (!roadnameId) {
+      return res.status(400).json({ error: '도로명 주소 또는 지번 주소로 roadname_id를 찾을 수 없습니다.' });
+    }
+
+    // 3. 해당 roadname_id 기준 road 존재 여부 확인
+    const [existingRoad] = await connection.query(`SELECT road_id FROM road WHERE roadname_id = ?`, [roadnameId]);
+    let roadId = existingRoad.length > 0 ? existingRoad[0].road_id : null;
+
+    // 4. 없으면 road 테이블에 신규 등록
+    if (!roadId) {
+      const [result] = await connection.query(
+        `INSERT INTO road (roadname_id, road_lastdate, road_lastfixdate, road_danger, road_count, road_state, road_url) 
+         VALUES (?, ?, NULL, NULL, 1, 0, ?)`,
+        [roadnameId, format(new Date(), 'yyyy-MM-dd'), fileUrl]
+      );
+      roadId = result.insertId;
+    } else {
+      // 5. 이미 존재할 경우 road_count 업데이트
+      await connection.query(
+        `UPDATE road SET road_count = road_count + 1, road_lastdate = ? WHERE road_id = ?`,
+        [format(new Date(), 'yyyy-MM-dd'), roadId]
+      );
+    }
+
+    // 6. 포트홀 정보 저장
+    await saveImageRecord({
+      road_id: roadId,
+      pothole_depth,
+      pothole_width,
+      pothole_latitude,
+      pothole_longitude,
+      pothole_date,
+      pothole_url: fileUrl,
+    });
+
+    res.json({
+      message: '업로드 및 DB 저장 성공',
+      fileUrl,
+    });
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ error: '서버 오류' });
+  } finally {
+    connection.release();
+  }
 });
 
 // ✅ React SPA 라우팅

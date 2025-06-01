@@ -19,8 +19,8 @@ const map = new naver.maps.Map('map', {
     center: new naver.maps.LatLng(35.95, 128.25),
     zoom: 6,
     zoomControl: true,
-    minZoom: 6,
-    maxZoom: 18,
+    minZoom: 7,
+    maxZoom: 15,
     zoomControlOptions: {
         position: naver.maps.Position.TOP_RIGHT
     }

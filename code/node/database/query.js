@@ -90,6 +90,56 @@ const getRoadSearch = () => {
     return `SELECT n.roadname_roadname, r.road_count, r.road_danger, r.road_lastdate, r.road_lastfixdate, r.road_state FROM roadname n INNER JOIN road r ON n.roadname_id = r.roadname_id ORDER BY r.roadname_id`;
 };
 
+const findRoadId = (roadAddress) => {
+  const parts = roadAddress.trim().split(' ');
+  if (parts.length < 4) return null;
+
+  const [sido, sigungu, emd, roadname] = parts;
+  return {
+    sql: `SELECT road_id FROM roadname WHERE 
+          roadname_sido = ? AND roadname_sigungu = ? AND roadname_emd = ? AND roadname_roadname = ?`,
+    values: [sido, sigungu, emd, roadname],
+  };
+};
+
+const insertPothole = () => {
+    return `SELECT n.roadname_roadname, r.road_count, r.road_danger, r.road_lastdate, r.road_lastfixdate, r.road_state FROM roadname n INNER JOIN road r ON n.roadname_id = r.roadname_id ORDER BY r.roadname_id`;
+}
+
+const findRoadIdByJibunAddress = (jibunAddress) => {
+  const parts = jibunAddress.trim().split(' ');
+  if (parts.length < 4) return null;
+
+  const [sido, sigungu, emd, ...rest] = parts;
+  if (rest.length === 0) return null;
+
+  const last = rest.join(' ').trim(); // 예: "행암리 500-1" 또는 "682"
+  const hasRi = last.includes('리');
+
+  if (hasRi) {
+    const [ri, number] = last.split(' ');
+    const [mainNumber, subNumber = '0'] = (number || '').split('-');
+    const jibun_number = `${mainNumber}-${subNumber}`;
+
+    return {
+      sql: `SELECT road_id FROM roadname 
+            WHERE jibun_sido = ? AND jibun_sigungu = ? AND jibun_emd = ? 
+              AND jibun_other = ? AND jibun_number = ?`,
+      values: [sido, sigungu, emd, ri, jibun_number],
+    };
+  } else {
+    const [mainNumber, subNumber = '0'] = last.split('-');
+    const jibun_number = `${mainNumber}-${subNumber}`;
+
+    return {
+      sql: `SELECT road_id FROM roadname 
+            WHERE jibun_sido = ? AND jibun_sigungu = ? AND jibun_emd = ? 
+              AND jibun_number = ?`,
+      values: [sido, sigungu, emd, jibun_number],
+    };
+  }
+};
+
 module.exports = {
   getSidoList,
   getSigunguList,
@@ -98,5 +148,8 @@ module.exports = {
   getRoadnameList,
   getRoadnameListbyEmd,
   getPotholeLocation,
-  getRoadSearch
+  getRoadSearch,
+  insertPothole,
+  findRoadId,
+  findRoadIdByJibunAddress
 };
