@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const multer = require('multer');
-const multerGoogleStorage = require('multer-cloud-storage');
+const { Storage } = require('@google-cloud/storage');
+const fs = require('fs');
 const connection = require('../database/db'); // DB 연결
 const query = require('../database/query');   // 쿼리 함수
 require('dotenv').config();
@@ -9,24 +10,24 @@ const roadaddr = require('../route/roadaddr'); // 주소 변환 모듈
 
 const router = express.Router();
 
+// GCP 키 디코딩
 const gcpKey = JSON.parse(Buffer.from(process.env.GCP_SA_KEY_BASE64, 'base64').toString('utf-8'));
 
-const storage = multer({
-  storage: multerGoogleStorage({
-    bucket: process.env.GOOGLE_CLOUD_STORAGE_BUCKET,
-    projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
-    credentials: gcpKey,
-    destination: 'pothole/', // destination도 지정 가능
-    acl: 'publicRead', // GCS에 공개 URL로 접근 가능하게
-    filename: (req, file, cb) => {
-      cb(null, `${Date.now()}-${file.originalname}`);
-    },
-  }),
+// GCS 객체 생성
+const storage = new Storage({
+  projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
+  credentials: gcpKey,
+});
+
+const bucket = storage.bucket(process.env.GOOGLE_CLOUD_STORAGE_BUCKET);
+
+// 로컬 임시 저장용 multer 설정
+const upload = multer({
+  dest: 'temp/',
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB 제한
 });
 
-const upload = storage; // 기존 multer 객체 이름 그대로 유지
-
+// pothole 데이터 저장 함수
 function saveImageRecord(data) {
   return new Promise((resolve, reject) => {
     const sql = query.insertPothole();
@@ -39,12 +40,53 @@ function saveImageRecord(data) {
       data.pothole_date,
       data.pothole_url,
     ];
-    db.query(sql, values, (err, results) => {
+    connection.query(sql, values, (err, results) => {
       if (err) return reject(err);
       resolve(results);
     });
   });
 }
+
+// 이미지 업로드 핸들러 예시
+router.post('/api/upload', upload.single('image'), async (req, res) => {
+  try {
+    const localPath = req.file.path;
+    const gcsFileName = `pothole/${Date.now()}-${req.file.originalname}`;
+    const file = bucket.file(gcsFileName);
+
+    // GCS에 업로드
+    await bucket.upload(localPath, {
+      destination: gcsFileName,
+      resumable: false,
+      metadata: {
+        contentType: req.file.mimetype,
+      },
+    });
+
+    // 공개 URL 생성
+    await file.makePublic();
+    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${gcsFileName}`;
+
+    // 임시 파일 삭제
+    fs.unlinkSync(localPath);
+
+    // 예시 데이터 저장
+    await saveImageRecord({
+      road_id: 1, // 실제 데이터로 바꾸세요
+      pothole_depth: 5,
+      pothole_width: 20,
+      pothole_latitude: 37.1234,
+      pothole_longitude: 127.5678,
+      pothole_date: new Date(),
+      pothole_url: publicUrl,
+    });
+
+    res.json({ message: '업로드 성공', url: publicUrl });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: '업로드 실패' });
+  }
+});
 
 // ✅ 기본 API 예제
 router.get('/api/hello', (req, res) => {
