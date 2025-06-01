@@ -85,8 +85,8 @@ async function runMigration() {
       .on('error', reject);
   });
 
-  for (const row of csvData) {
-    if (!row.roadname_id || isNaN(row.roadname_id)) continue;
+for (const row of csvData) {
+  if (!row.roadname_id || isNaN(row.roadname_id)) continue;
 
   const values = [
     parseInt(row.roadname_id, 10),
@@ -101,14 +101,16 @@ async function runMigration() {
     row.jibun_number?.trim() || ''
   ];
 
-    await connection.execute(
-      `INSERT IGNORE INTO roadname (
-        roadname_id, roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname,
-        jibun_sido, jibun_sigungu, jibun_emd, jibun_other, jibun_number
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      values
-    );
-  }
+  await connection.execute(
+    `INSERT IGNORE INTO roadname (
+      roadname_id, roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname,
+      jibun_sido, jibun_sigungu, jibun_emd, jibun_other, jibun_number
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    values
+  );
+
+  console.log(`Inserted roadname_id: ${row.roadname_id}`);
+}
 
   console.log('✅ roadname 테이블 마이그레이션 완료');
   await connection.end();
