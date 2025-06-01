@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const multer = require('multer');
-const { multerGoogleStorage } = require('multer-google-storage');
+const multerGoogleStorage = require('multer-cloud-storage');
 const connection = require('../database/db'); // DB 연결
 const query = require('../database/query');   // 쿼리 함수
 require('dotenv').config();
