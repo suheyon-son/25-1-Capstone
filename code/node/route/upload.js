@@ -11,11 +11,7 @@ const {
 } = require('../database/query'); 
 const router = express.Router();
 
-const gcpKey = JSON.parse(Buffer.from(process.env.GCP_SA_KEY_BASE64, 'base64').toString('utf-8'));
-const storage = new Storage({
-  projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
-  credentials: gcpKey,
-});
+const storage = new Storage();
 const bucket = storage.bucket(process.env.GOOGLE_CLOUD_STORAGE_BUCKET);
 
 const upload = multer({
