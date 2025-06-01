@@ -14,13 +14,14 @@ steps:
 
         # Secret 생성
         kubectl create secret generic capstone-secrets \
-          --from-literal=GCP_SA_KEY_BASE64="${GCP_SA_KEY}" \
+          --from-literal=GCP_SA_KEY_BASE64="${_GCP_SA_KEY}" \
           --from-literal=GOOGLE_CLOUD_STORAGE_BUCKET="steel-fin-459711-k9-01424cceaf04" \
           --from-literal=GOOGLE_CLOUD_PROJECT_ID="steel-fin-459711-k9" \
           --from-literal=KAKAO_API_KEY="1e1e4cdde8201f18aacae19257f3fffa"
     env:
       - CLOUDSDK_COMPUTE_REGION=asia-northeast3
       - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
+      - _GCP_SA_KEY=${_GCP_SA_KEY}
 
   #############################################
   # 2. Express (Node.js 서버) 빌드 및 배포
@@ -74,16 +75,4 @@ steps:
       - flask-ai-server-sha256-1=asia.gcr.io/steel-fin-459711-k9/capstone-flask:$SHORT_SHA
     env:
       - CLOUDSDK_COMPUTE_REGION=asia-northeast3
-      - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
-
-images:
-  - asia.gcr.io/steel-fin-459711-k9/capstone-server:$SHORT_SHA
-  - asia.gcr.io/steel-fin-459711-k9/capstone-flask:$SHORT_SHA
-
-options:
-  logging: CLOUD_LOGGING_ONLY
-
-availableSecrets:
-  secretManager:
-    - versionName: projects/steel-fin-459711-k9/secrets/gcp-storage-key/versions/latest
-      env: GCP_SA_KEY
+      - CLOUDSDK_CONTAINER_CLUSTER=
