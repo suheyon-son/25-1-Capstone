@@ -2,7 +2,7 @@ const express = require('express');
 const connection = require('../database/db');
 const router = express.Router();
 
-// 포트홀 위치 조회 API
+// 포트홀 월별 통계 API
 router.get('/api/pothole-monthly-count', (req, res) => {
     const sql = `
         SELECT
@@ -11,6 +11,35 @@ router.get('/api/pothole-monthly-count', (req, res) => {
         FROM pothole
         GROUP BY month_date
         ORDER BY month_date DESC LIMIT 12;
+    `;
+    const values = [];
+
+    connection.query(sql, values, (err, results) => {
+        if (err) return res.status(500).json({ error: err });
+        res.json(results);
+    });
+});
+
+// 포트홀 계절별 통계 API
+//!! 문제점 : 계절별 통계에서 봄/여름/가을/겨울을 나눌 기준이 명확하지 않음
+//!! 임시 조치 : 분기별로 처리
+router.get('/api/pothole-season-count', (req, res) => {
+    const sql = `
+        SELECT
+            CONCAT(YEAR(pothole_date), '-',
+                CASE QUARTER(pothole_date)
+                    WHEN 1 THEN '봄'
+                    WHEN 2 THEN '여름'
+                    WHEN 3 THEN '가을'
+                    WHEN 4 THEN '겨울'
+                    ELSE '알 수 없음'
+                END
+            ) AS season_date,
+            COUNT(pothole_id) AS pothole_count
+        FROM pothole
+        GROUP BY season_date
+        ORDER BY season_date DESC
+        LIMIT 8;
     `;
     const values = [];
 
