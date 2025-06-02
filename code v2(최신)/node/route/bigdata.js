@@ -26,19 +26,12 @@ router.get('/api/pothole-monthly-count', (req, res) => {
 router.get('/api/pothole-season-count', (req, res) => {
     const sql = `
         SELECT
-            CONCAT(YEAR(pothole_date), '-',
-                CASE QUARTER(pothole_date)
-                    WHEN 1 THEN '봄'
-                    WHEN 2 THEN '여름'
-                    WHEN 3 THEN '가을'
-                    WHEN 4 THEN '겨울'
-                    ELSE '알 수 없음'
-                END
-            ) AS season_date,
+            YEAR(pothole_date) AS year_date,
+            QUARTER(pothole_date) AS season_rawdate,
             COUNT(pothole_id) AS pothole_count
         FROM pothole
-        GROUP BY season_date
-        ORDER BY season_date DESC
+        GROUP BY year_date, season_rawdate
+        ORDER BY year_date DESC, season_rawdate DESC
         LIMIT 8;
     `;
     const values = [];
@@ -48,5 +41,11 @@ router.get('/api/pothole-season-count', (req, res) => {
         res.json(results);
     });
 });
+
+
+
+// 포트홀 날씨별 통계 API
+//!! 문제점 : 날씨별 통계에서 날씨를 어떻게 구분할지 명확하지 않음
+
 
 module.exports = router;
