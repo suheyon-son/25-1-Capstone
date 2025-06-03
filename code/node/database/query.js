@@ -105,9 +105,8 @@ const getPotholeLocation = (filters = {}) => {
 
 // 도로 검색 (도로 목록)
 const getRoadSearch = () => ({
-  sql: `SELECT n.roadname_roadname, r.road_count, r.road_danger, r.road_lastdate, r.road_lastfixdate, r.road_state
-        FROM roadname n 
-        INNER JOIN road r ON n.roadname_id = r.roadname_id 
+  sql: `SELECT n.roadname_roadname, r.road_count, r.road_danger, r.road_lastdate, r.road_lastfixdate, r.road_state, p.pothole_url
+        FROM ( roadname n INNER JOIN road r ON n.roadname_id = r.roadname_id ) INNER JOIN pothole p ON r.road_id = p.road_id
         ORDER BY r.roadname_id`,
   values: [],
 });
@@ -168,11 +167,11 @@ const checkExistingRoadByRoadnameId = (roadnameId) => ({
 });
 
 // 새 도로 삽입
-const insertNewRoad = ({ roadnameId, fileUrl, date }) => ({
+const insertNewRoad = ({ roadnameId, date }) => ({
   sql: `INSERT INTO road 
-        (roadname_id, road_lastdate, road_lastfixdate, road_danger, road_count, road_state, road_url)
-        VALUES (?, ?, NULL, NULL, 1, 0, ?)`,
-  values: [roadnameId, date, fileUrl],
+        (roadname_id, road_lastdate, road_lastfixdate, road_danger, road_count, road_state)
+        VALUES (?, ?, NULL, NULL, 1, 0)`,
+  values: [roadnameId, date],
 });
 
 // 도로 카운트 증가

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import "./RoadAnalysis.css";
+import "./PotholeQueryPage.css";
 
 const thLabels = [
   { label: "도로명", value: "roadName" },
@@ -9,9 +9,10 @@ const thLabels = [
   { label: "최근 측정 일시", value: "lastMeasuredAt" },
   { label: "최근 보수 일시", value: "lastRepairedAt" },
   { label: "처리 상태", value: "status" },
+  { label: "포트홀 URL", value: "potholeUrl" },
 ];
 
-const RoadAnalysis = () => {
+const PotholeQueryPage = ({ setSelectedImageUrl }) => {
   const [sortField, setSortField] = useState(null);
   const [sortDirection, setSortDirection] = useState(null);
   const [data, setData] = useState([]);
@@ -37,6 +38,7 @@ const RoadAnalysis = () => {
           lastMeasuredAt: item.road_lastdate,
           lastRepairedAt: item.road_lastfixdate,
           status: item.road_state,
+          potholeUrl: item.pothole_url || "없음",
         }));
         setData(transformed);
       })
@@ -75,7 +77,7 @@ const RoadAnalysis = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  return (
+  return ( 
     <div className="container">
       <div className="content">
         <div className="menu-bar">
@@ -114,7 +116,7 @@ const RoadAnalysis = () => {
             검색
           </button>
         </div>
-
+        
         {/* 테이블 */}
         <div className="table-container">
           <table className="table">
@@ -158,16 +160,23 @@ const RoadAnalysis = () => {
                   <td>{row.lastMeasuredAt}</td>
                   <td>{row.lastRepairedAt}</td>
                   <td>{row.status}</td>
+                  <td>{row.potholeUrl ? (
+                    <button className="bg-blue-500 text-white px-2 py-1 rounded"
+                    onClick={() => setSelectedImageUrl(row.potholeUrl)}
+                    >
+                      이미지 보기
+                    </button>
+                    ) : ( '없음' )}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-
         <footer className="footer">2025 Capstone Design</footer>
       </div>
     </div>
   );
 };
 
-export default RoadAnalysis;
+export default PotholeQueryPage;

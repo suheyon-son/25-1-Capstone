@@ -31,14 +31,14 @@ app.use(routes);
 const PORT = process.env.PORT || 3000;
 
 async function startServer() {
-  // try {
-  //   console.log('마이그레이션 시작...');
-  //   await runMigration(); // DB 마이그레이션 수행
-  //   console.log('마이그레이션 완료');
-  // } catch (err) {
-  //   console.error('마이그레이션 실패:', err);
-  //   process.exit(1); // 마이그레이션 실패 시 서버 시작 중단
-  // }
+  try {
+    console.log('마이그레이션 시작...');
+    await runMigration(); // DB 마이그레이션 수행
+    console.log('마이그레이션 완료');
+  } catch (err) {
+    console.error('마이그레이션 실패:', err);
+    process.exit(1); // 마이그레이션 실패 시 서버 시작 중단
+  }
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Express 앱이 ${PORT}번 포트에서 실행 중입니다.`);

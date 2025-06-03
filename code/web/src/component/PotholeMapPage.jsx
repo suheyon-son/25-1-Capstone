@@ -76,10 +76,10 @@ const onSearchClick = () => {
   }
 
   const filters = {
-    sido: selectedSido,
-    sigungu: selectedSigungu,
-    emd: selectedEmd,
-    road: selectedRoad,
+    roadname_sido: selectedSido,
+    roadname_sigungu: selectedSigungu,
+    roadname_emd: selectedEmd,
+    roadname_roadname: selectedRoad,
     dangerMin,
     dangerMax,
     depthMin,

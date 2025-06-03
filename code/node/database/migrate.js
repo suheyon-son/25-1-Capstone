@@ -15,7 +15,6 @@ async function runMigration() {
   // 기존 테이블 삭제
   await connection.query(`DROP TABLE IF EXISTS pothole`);
   await connection.query(`DROP TABLE IF EXISTS road`);
-  await connection.query(`DROP TABLE IF EXISTS roadname`);
 
   // 새 테이블 생성
   const createTableQueries = [
@@ -40,7 +39,6 @@ async function runMigration() {
       road_danger FLOAT NULL,
       road_count INT NULL,
       road_state INT NULL,
-      road_url VARCHAR(100) NULL,
       PRIMARY KEY (road_id),
       FOREIGN KEY (roadname_id) REFERENCES roadname (roadname_id) ON DELETE CASCADE
     )`,
@@ -52,7 +50,7 @@ async function runMigration() {
       pothole_latitude DOUBLE NOT NULL,
       pothole_longitude DOUBLE NOT NULL,
       pothole_date DATE NOT NULL,
-      pothole_url VARCHAR(100),
+      pothole_url VARCHAR(300),
       PRIMARY KEY (pothole_id),
       FOREIGN KEY (road_id) REFERENCES road (road_id) ON DELETE CASCADE
     )`
