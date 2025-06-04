@@ -15,6 +15,8 @@ async function runMigration() {
   // 기존 테이블 삭제
   await connection.query(`DROP TABLE IF EXISTS pothole`);
   await connection.query(`DROP TABLE IF EXISTS road`);
+  await connection.query(`DROP TABLE IF EXISTS roadname`);
+  console.log('기존 테이블을 삭제했습니다.');
 
   // 새 테이블 생성
   const createTableQueries = [
