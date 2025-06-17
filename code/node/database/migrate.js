@@ -1,31 +1,57 @@
 const mysql = require('mysql2/promise');
 const fs = require('fs');
 const path = require('path');
-const axios = require('axios');
-const FormData = require('form-data');
 require('dotenv').config();
+
+const { Storage } = require('@google-cloud/storage');
 
 const dataList = JSON.parse(fs.readFileSync(path.join(__dirname, 'migrate-data.json'), 'utf8')).slice(0, 150);
 
-async function uploadOne(data) {
-  const form = new FormData();
-  const fullImagePath = path.join(__dirname, 'images', data.imagePath);
+// GCP 버킷 설정
+const storage = new Storage({
+  projectId: process.env.GCP_PROJECT_ID,
+  credentials: JSON.parse(process.env.GCP_KEY_JSON),
+});
+const bucketName = process.env.GCP_BUCKET_NAME;
+const bucket = storage.bucket(bucketName);
 
-  form.append('pothole_depth', data.pothole_depth);
-  form.append('pothole_width', data.pothole_width);
-  form.append('pothole_latitude', data.pothole_latitude);
-  form.append('pothole_longitude', data.pothole_longitude);
-  form.append('pothole_date', data.pothole_date);
-  form.append('image', fs.createReadStream(fullImagePath));
+async function uploadToGCP(localPath, destFileName) {
+  await bucket.upload(localPath, {
+    destination: destFileName,
+    public: true,
+    metadata: {
+      cacheControl: 'public, max-age=31536000',
+    }
+  });
+  return `https://storage.googleapis.com/${bucketName}/${destFileName}`;
+}
+
+async function uploadOne(connection, data, index) {
+  const fullImagePath = path.join(__dirname, 'images', data.imagePath);
+  const destFileName = `potholes/pothole_${index + 1}.jpeg`;
 
   try {
-    const response = await axios.post(`/api/upload`, form, {
-      headers: form.getHeaders(),
-      maxBodyLength: Infinity,
-    });
-    console.log('✅ 업로드 성공:', data.imagePath, response.data.fileUrl);
-  } catch (error) {
-    console.error('❌ 업로드 실패:', data.imagePath, error.response?.data || error.message);
+    const imageUrl = await uploadToGCP(fullImagePath, destFileName);
+
+    // pothole 데이터 삽입
+    const sql = `
+      INSERT INTO pothole (road_id, pothole_depth, pothole_width, pothole_latitude, pothole_longitude, pothole_date, pothole_url)
+      VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    const values = [
+      data.road_id,
+      data.pothole_depth,
+      data.pothole_width,
+      data.pothole_latitude,
+      data.pothole_longitude,
+      data.pothole_date,
+      imageUrl,
+    ];
+
+    await connection.query(sql, values);
+    console.log(`✅ ${data.imagePath} 업로드 및 DB 삽입 완료`);
+
+  } catch (err) {
+    console.error(`❌ ${data.imagePath} 실패:`, err.message);
   }
 }
 
@@ -37,13 +63,11 @@ async function runMigration() {
     database: process.env.DATABASE_DATABASE
   });
 
-  // 기존 테이블 삭제
   await connection.query(`DROP TABLE IF EXISTS pothole`);
   await connection.query(`DROP TABLE IF EXISTS road`);
   await connection.query(`DROP TABLE IF EXISTS roadname`);
   console.log('🧹 기존 테이블 삭제 완료');
 
-  // 새 테이블 생성
   const createTableQueries = [
     `CREATE TABLE IF NOT EXISTS roadname (
       roadname_id INT NOT NULL,
@@ -88,10 +112,9 @@ async function runMigration() {
   }
   console.log('📦 새 테이블 생성 완료');
 
-  // 데이터 업로드
   for (let i = 0; i < dataList.length; i++) {
     console.log(`⬆️ ${i + 1}/${dataList.length} 데이터 업로드 중...`);
-    await uploadOne(dataList[i]);
+    await uploadOne(connection, dataList[i], i);
   }
 
   await connection.end();
