@@ -5,7 +5,7 @@ const createMarker = (x, y) => {
         position: position,
         map: map,
         icon: {
-            url: './img/pin_default.png',
+            url: '/img/pin_default.png',
             size: new naver.maps.Size(22, 35),
             origin: new naver.maps.Point(0, 0),
             anchor: new naver.maps.Point(11, 35)
