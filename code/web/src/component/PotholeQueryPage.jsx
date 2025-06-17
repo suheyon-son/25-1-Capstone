@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import dayjs from "dayjs";
 import "./PotholeQueryPage.css";
 
 const thLabels = [
@@ -11,6 +12,10 @@ const thLabels = [
   { label: "처리 상태", value: "status" },
   { label: "포트홀 URL", value: "potholeUrl" },
 ];
+
+function formatKoreanDate(dateStr) {
+  return dayjs(dateStr).format("YYYY년 MM월 DD일 HH:mm:ss");
+}
 
 const PotholeQueryPage = ({ setSelectedImageUrl }) => {
   const [sortField, setSortField] = useState(null);
@@ -35,8 +40,8 @@ const PotholeQueryPage = ({ setSelectedImageUrl }) => {
           roadName: item.roadname_roadname,
           potholeCount: item.road_count,
           risk: item.road_danger,
-          lastMeasuredAt: item.road_lastdate,
-          lastRepairedAt: item.road_lastfixdate,
+          lastMeasuredAt: formatKoreanDate(item.road_lastdate),
+          lastRepairedAt: formatKoreanDate(item.road_lastfixdate),
           status: item.road_state,
           potholeUrl: item.pothole_url || "없음",
         }));

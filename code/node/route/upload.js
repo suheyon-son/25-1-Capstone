@@ -8,7 +8,6 @@ require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 const roadaddr = require('./roadaddr'); // 도로명 주소 함수
 const {
     findRoadId,
-    getRoadSearch,
 } = require('../database/query'); 
 const router = express.Router();
 
@@ -138,60 +137,6 @@ router.post('/api/upload', upload.single('image'), async (req, res) => {
     console.error('Upload error:', error);
     res.status(500).json({ error: '서버 오류' });
   }
-});
-
-router.get('/api/roadSearch', (req, res) => {
-  const { field, query: searchValue } = req.query;
-  const fieldMap = {
-    roadName: 'roadname_roadname',
-    potholeCount: 'road_count',
-    risk: 'road_danger',
-    lastMeasuredAt: 'road_lastdate',
-    lastRepairedAt: 'road_lastfixdate',
-    status: 'road_state',
-    pothole_url: 'pothole_url',
-  };
-
-  const dbField = fieldMap[field];
-  let sql = '', params = [];
-
-  if (dbField && searchValue) {
-    const numberFields = ['road_count', 'road_danger'];
-    if (numberFields.includes(dbField)) {
-      sql = `
-        SELECT n.roadname_roadname, r.road_count, r.road_danger, 
-               r.road_lastdate, r.road_lastfixdate, r.road_state
-        FROM roadname n
-        INNER JOIN road r ON n.roadname_id = r.roadname_id
-        WHERE ${dbField} = ?
-        ORDER BY n.roadname_roadname
-      `;
-      params = [parseInt(searchValue)];
-    } else {
-      sql = `
-        SELECT n.roadname_roadname, r.road_count, r.road_danger, 
-               r.road_lastdate, r.road_lastfixdate, r.road_state
-        FROM roadname n
-        INNER JOIN road r ON n.roadname_id = r.roadname_id
-        WHERE ${dbField} LIKE ?
-        ORDER BY n.roadname_roadname
-      `;
-      params = [`%${searchValue}%`];
-    }
-  } else {
-    // 기본 전체 조회 쿼리
-    const roadQuery = getRoadSearch();
-    sql = roadQuery.sql;
-    params = roadQuery.values;
-  }
-
-  connection.query(sql, params, (err, results) => {
-    if (err) {
-      console.error('roadSearch 쿼리 오류:', err);
-      return res.status(500).json({ error: 'DB 조회 오류' });
-    }
-    res.json(results);
-  });
 });
 
 module.exports = router;

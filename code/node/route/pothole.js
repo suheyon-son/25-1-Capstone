@@ -18,31 +18,69 @@ router.get('/api/pothole-location', (req, res) => {
     dangerMax,
   } = req.query;
 
-  if (!roadname_sido) {
-    return res.status(400).json({ error: '시도 값이 필요합니다.' });
+  const conditions = [];
+  const values = [];
+
+  // 기본 지역 필터링
+  if (roadname_sido) {
+    conditions.push('p.roadname_sido = ?');
+    values.push(roadname_sido);
+  }
+  if (roadname_sigungu) {
+    conditions.push('p.roadname_sigungu = ?');
+    values.push(roadname_sigungu);
+  }
+  if (roadname_emd) {
+    conditions.push('p.roadname_emd = ?');
+    values.push(roadname_emd);
+  }
+  if (roadname_roadname) {
+    conditions.push('p.roadname_roadname = ?');
+    values.push(roadname_roadname);
   }
 
-  const filters = {
-    sido: roadname_sido,
-    sigungu: roadname_sigungu,
-    emd: roadname_emd,
-    roadname: roadname_roadname,
-    depthMin: depthMin ? parseFloat(depthMin) : null,
-    depthMax: depthMax ? parseFloat(depthMax) : null,
-    widthMin: widthMin ? parseFloat(widthMin) : null,
-    widthMax: widthMax ? parseFloat(widthMax) : null,
-    dangerMin: dangerMin ? parseFloat(dangerMin) : null,
-    dangerMax: dangerMax ? parseFloat(dangerMax) : null,
-  };
+  // 숫자 필터링 (범위 조건)
+  if (depthMin) {
+    conditions.push('p.depth >= ?');
+    values.push(parseFloat(depthMin));
+  }
+  if (depthMax) {
+    conditions.push('p.depth <= ?');
+    values.push(parseFloat(depthMax));
+  }
+  if (widthMin) {
+    conditions.push('p.width >= ?');
+    values.push(parseFloat(widthMin));
+  }
+  if (widthMax) {
+    conditions.push('p.width <= ?');
+    values.push(parseFloat(widthMax));
+  }
+  if (dangerMin) {
+    conditions.push('p.danger >= ?');
+    values.push(parseFloat(dangerMin));
+  }
+  if (dangerMax) {
+    conditions.push('p.danger <= ?');
+    values.push(parseFloat(dangerMax));
+  }
 
-  const sqlQuery = query.getPotholeLocation(filters);
+  // 최종 SQL 생성
+  let sql = `
+    SELECT p.id, p.latitude, p.longitude, p.depth, p.width, p.danger, p.url
+    FROM pothole p
+  `;
 
-  connection.query(sqlQuery.sql, sqlQuery.values, (err, results) => {
+  if (conditions.length > 0) {
+    sql += ` WHERE ` + conditions.join(' AND ');
+  }
+
+  connection.query(sql, values, (err, results) => {
     if (err) {
       console.error('쿼리 에러:', err);
       return res.status(500).json({ error: '서버 오류' });
     }
-    res.json(results); // ✅ createMarker(x, y)에서 바로 쓸 수 있는 배열로 응답
+    res.json(results); // 바로 marker 배열로 사용 가능
   });
 });
 
