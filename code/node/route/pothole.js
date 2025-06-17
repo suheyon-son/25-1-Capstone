@@ -23,52 +23,51 @@ router.get('/api/pothole-location', (req, res) => {
 
   // 기본 지역 필터링
   if (roadname_sido) {
-    conditions.push('p.roadname_sido = ?');
+    conditions.push('n.roadname_sido = ?');
     values.push(roadname_sido);
   }
   if (roadname_sigungu) {
-    conditions.push('p.roadname_sigungu = ?');
+    conditions.push('n.roadname_sigungu = ?');
     values.push(roadname_sigungu);
   }
   if (roadname_emd) {
-    conditions.push('p.roadname_emd = ?');
+    conditions.push('n.roadname_emd = ?');
     values.push(roadname_emd);
   }
   if (roadname_roadname) {
-    conditions.push('p.roadname_roadname = ?');
+    conditions.push('n.roadname_roadname = ?');
     values.push(roadname_roadname);
   }
 
   // 숫자 필터링 (범위 조건)
   if (depthMin) {
-    conditions.push('p.depth >= ?');
+    conditions.push('p.pothole_depth >= ?');
     values.push(parseFloat(depthMin));
   }
   if (depthMax) {
-    conditions.push('p.depth <= ?');
+    conditions.push('p.pothole_depth <= ?');
     values.push(parseFloat(depthMax));
   }
   if (widthMin) {
-    conditions.push('p.width >= ?');
+    conditions.push('p.pothole_width >= ?');
     values.push(parseFloat(widthMin));
   }
   if (widthMax) {
-    conditions.push('p.width <= ?');
+    conditions.push('p.pothole_width <= ?');
     values.push(parseFloat(widthMax));
   }
   if (dangerMin) {
-    conditions.push('p.danger >= ?');
+    conditions.push('p.pothole_danger >= ?');
     values.push(parseFloat(dangerMin));
   }
   if (dangerMax) {
-    conditions.push('p.danger <= ?');
+    conditions.push('p.pothole_danger <= ?');
     values.push(parseFloat(dangerMax));
   }
 
   // 최종 SQL 생성
   let sql = `
-    SELECT p.pothole_latitude, p.pothole_longitude
-    FROM pothole p
+    select p.pothole_latitude, p.pothole_longitude from (roadname n inner join road r on n.roadname_id = r.roadname_id) inner join pothole p on r.road_id = p.road_id
   `;
 
   if (conditions.length > 0) {
