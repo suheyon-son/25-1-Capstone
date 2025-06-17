@@ -35,23 +35,67 @@ async function uploadOne(connection, data) {
   }
 
   try {
+    // 1. roadname 존재 확인
+    const [roadnameRows] = await connection.query(
+      `SELECT roadname_id FROM roadname WHERE 
+        roadname_sido = ? AND 
+        roadname_sigungu = ? AND 
+        roadname_emd = ? AND 
+        roadname_roadname = ?`,
+      [
+        data.roadname_sido,
+        data.roadname_sigungu,
+        data.roadname_emd,
+        data.roadname_roadname
+      ]
+    );
+
+    let roadnameId;
+    if (roadnameRows.length > 0) {
+      roadnameId = roadnameRows[0].roadname_id;
+    } else {
+      const [insertResult] = await connection.query(
+        `INSERT INTO roadname (
+          roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname
+        ) VALUES (?, ?, ?, ?)`,
+        [
+          data.roadname_sido,
+          data.roadname_sigungu,
+          data.roadname_emd,
+          data.roadname_roadname
+        ]
+      );
+      roadnameId = insertResult.insertId;
+    }
+
+    // 2. road 삽입
+    const [roadResult] = await connection.query(
+      `INSERT INTO road (roadname_id) VALUES (?)`,
+      [roadnameId]
+    );
+    const roadId = roadResult.insertId;
+
+    // 3. 이미지 업로드
     const fileUrl = await uploadToGCP(fullImagePath, data.imagePath);
 
+    // 4. pothole 삽입
     await connection.query(
       `INSERT INTO pothole (
-        pothole_depth, pothole_width, pothole_latitude, pothole_longitude, pothole_date, pothole_url
-      ) VALUES (?, ?, ?, ?, ?, ?)`,
+        road_id, pothole_depth, pothole_width, pothole_latitude, pothole_longitude, pothole_date, pothole_url
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
+        roadId,
         data.pothole_depth,
         data.pothole_width,
         data.pothole_latitude,
         data.pothole_longitude,
         data.pothole_date,
-        fileUrl,
+        fileUrl
       ]
     );
 
     console.log('✅ 저장 완료:', data.imagePath);
+
   } catch (err) {
     console.error('❌ 업로드 실패:', data.imagePath, err.message);
   }
@@ -75,16 +119,16 @@ async function runMigration() {
 
   const createTableQueries = [
     `CREATE TABLE IF NOT EXISTS roadname (
-      roadname_id INT NOT NULL,
+      roadname_id INT NOT NULL AUTO_INCREMENT,
       roadname_sido VARCHAR(30) NOT NULL,
       roadname_sigungu VARCHAR(30) NOT NULL,
       roadname_emd VARCHAR(30) NOT NULL,
       roadname_roadname VARCHAR(30) NOT NULL,
-      jibun_sido VARCHAR(30) NOT NULL,
-      jibun_sigungu VARCHAR(30) NOT NULL,
-      jibun_emd VARCHAR(30) NOT NULL,
-      jibun_other VARCHAR(30) NOT NULL,
-      jibun_number VARCHAR(30) NOT NULL,
+      jibun_sido VARCHAR(30),
+      jibun_sigungu VARCHAR(30),
+      jibun_emd VARCHAR(30),
+      jibun_other VARCHAR(30),
+      jibun_number VARCHAR(30),
       PRIMARY KEY (roadname_id)
     )`,
     `CREATE TABLE IF NOT EXISTS road (
