@@ -19,7 +19,7 @@ async function uploadOne(data) {
   form.append('image', fs.createReadStream(fullImagePath));
 
   try {
-    const response = await axios.post(`https://suhyeon.xyz/api/upload`, form, {
+    const response = await axios.post(`/api/upload`, form, {
       headers: form.getHeaders(),
       maxBodyLength: Infinity,
     });
