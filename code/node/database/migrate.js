@@ -153,7 +153,7 @@ async function runMigration() {
       road_lastfixdate DATE NULL,
       road_danger FLOAT NULL,
       road_count INT NULL,
-      road_state INT NULL,
+      road_state VARCHAR(10) NULL,
       PRIMARY KEY (road_id),
       FOREIGN KEY (roadname_id) REFERENCES roadname (roadname_id) ON DELETE CASCADE
     )`,
