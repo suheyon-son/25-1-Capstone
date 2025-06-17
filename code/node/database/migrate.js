@@ -1,67 +1,73 @@
 const mysql = require('mysql2/promise');
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config();
-
 const { Storage } = require('@google-cloud/storage');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
-const dataList = JSON.parse(fs.readFileSync(path.join(__dirname, 'migrate-data.json'), 'utf8')).slice(0, 150);
+// JSON 데이터 불러오기
+const dataList = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'migrate-data.json'), 'utf8')
+);
 
-// GCP 버킷 설정
-const storage = new Storage({
-  projectId: process.env.GCP_PROJECT_ID,
-  credentials: JSON.parse(process.env.GCP_KEY_JSON),
-});
-const bucketName = process.env.GCP_BUCKET_NAME;
-const bucket = storage.bucket(bucketName);
+// GCP 스토리지 초기화
+const storage = new Storage();
+const bucket = storage.bucket(process.env.GOOGLE_CLOUD_STORAGE_BUCKET);
 
-async function uploadToGCP(localPath, destFileName) {
-  await bucket.upload(localPath, {
+// 이미지 업로드 함수
+async function uploadToGCP(localFilePath, destFileName) {
+  await bucket.upload(localFilePath, {
     destination: destFileName,
     public: true,
     metadata: {
       cacheControl: 'public, max-age=31536000',
-    }
+    },
   });
-  return `https://storage.googleapis.com/${bucketName}/${destFileName}`;
+
+  return `https://storage.googleapis.com/${process.env.GOOGLE_CLOUD_STORAGE_BUCKET}/${destFileName}`;
 }
 
-async function uploadOne(connection, data, index) {
+// 하나의 pothole 데이터를 처리
+async function uploadOne(connection, data) {
   const fullImagePath = path.join(__dirname, 'images', data.imagePath);
-  const destFileName = `potholes/pothole_${index + 1}.jpeg`;
+
+  if (!fs.existsSync(fullImagePath)) {
+    console.error('❌ 이미지 파일 없음:', data.imagePath);
+    return;
+  }
 
   try {
-    const imageUrl = await uploadToGCP(fullImagePath, destFileName);
+    const fileUrl = await uploadToGCP(fullImagePath, data.imagePath);
 
-    // pothole 데이터 삽입
-    const sql = `
-      INSERT INTO pothole (road_id, pothole_depth, pothole_width, pothole_latitude, pothole_longitude, pothole_date, pothole_url)
-      VALUES (?, ?, ?, ?, ?, ?, ?)`;
-    const values = [
-      data.road_id,
-      data.pothole_depth,
-      data.pothole_width,
-      data.pothole_latitude,
-      data.pothole_longitude,
-      data.pothole_date,
-      imageUrl,
-    ];
+    await connection.query(
+      `INSERT INTO pothole (
+        pothole_depth, pothole_width, pothole_latitude, pothole_longitude, pothole_date, pothole_url
+      ) VALUES (?, ?, ?, ?, ?, ?)`,
+      [
+        data.pothole_depth,
+        data.pothole_width,
+        data.pothole_latitude,
+        data.pothole_longitude,
+        data.pothole_date,
+        fileUrl,
+      ]
+    );
 
-    await connection.query(sql, values);
-    console.log(`✅ ${data.imagePath} 업로드 및 DB 삽입 완료`);
-
+    console.log('✅ 저장 완료:', data.imagePath);
   } catch (err) {
-    console.error(`❌ ${data.imagePath} 실패:`, err.message);
+    console.error('❌ 업로드 실패:', data.imagePath, err.message);
   }
 }
 
+// 마이그레이션 전체 실행
 async function runMigration() {
   const connection = await mysql.createConnection({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_DATABASE
+    database: process.env.DATABASE_DATABASE,
   });
+  console.log('📦 마이그레이션 시작');
+
 
   await connection.query(`DROP TABLE IF EXISTS pothole`);
   await connection.query(`DROP TABLE IF EXISTS road`);
@@ -113,8 +119,8 @@ async function runMigration() {
   console.log('📦 새 테이블 생성 완료');
 
   for (let i = 0; i < dataList.length; i++) {
-    console.log(`⬆️ ${i + 1}/${dataList.length} 데이터 업로드 중...`);
-    await uploadOne(connection, dataList[i], i);
+    console.log(`⬆️ ${i + 1}/${dataList.length}`);
+    await uploadOne(connection, dataList[i]);
   }
 
   await connection.end();
