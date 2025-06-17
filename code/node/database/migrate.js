@@ -5,7 +5,7 @@ const axios = require('axios');
 const FormData = require('form-data');
 require('dotenv').config();
 
-const dataList = JSON.parse(fs.readFileSync(path.join(__dirname,'./migrate-data.json', 'utf8'))).slice(0, 150);
+const dataList = JSON.parse(fs.readFileSync(path.join(__dirname,'./migrate-data.json'))).slice(0, 150);
 
 async function uploadOne(data) {
   const form = new FormData();
