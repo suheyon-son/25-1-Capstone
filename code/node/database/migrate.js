@@ -27,10 +27,10 @@ async function uploadToGCP(localFilePath, destFileName) {
 
 // 하나의 pothole 데이터를 처리
 async function uploadOne(connection, data) {
-  const fullImagePath = path.join(__dirname, 'images', data.imagePath);
+  const fullImagePath = path.join(__dirname, 'images', data.image);
 
   if (!fs.existsSync(fullImagePath)) {
-    console.error('❌ 이미지 파일 없음:', data.imagePath);
+    console.error('❌ 이미지 파일 없음:', data.image);
     return;
   }
 
@@ -56,27 +56,42 @@ async function uploadOne(connection, data) {
     } else {
       const [insertResult] = await connection.query(
         `INSERT INTO roadname (
-          roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname
-        ) VALUES (?, ?, ?, ?)`,
+          roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname,
+          jibun_sido, jibun_sigungu, jibun_emd, jibun_other, jibun_number
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           data.roadname_sido,
           data.roadname_sigungu,
           data.roadname_emd,
-          data.roadname_roadname
+          data.roadname_roadname,
+          data.jibun_sido || '',
+          data.jibun_sigungu || '',
+          data.jibun_emd || '',
+          data.jibun_other || '',
+          data.jibun_number || ''
         ]
       );
       roadnameId = insertResult.insertId;
     }
 
-    // 2. road 삽입
+    // 2. road 삽입 (추가 필드 포함)
     const [roadResult] = await connection.query(
-      `INSERT INTO road (roadname_id) VALUES (?)`,
-      [roadnameId]
+      `INSERT INTO road (
+        roadname_id, road_lastdate, road_lastfixdate, road_danger, road_count, road_state
+      ) VALUES (?, ?, ?, ?, ?, ?)`,
+      [
+        roadnameId,
+        data.road_lastdate,
+        data.road_lastfixdate,
+        data.road_danger,
+        data.road_count,
+        data.road_state
+      ]
     );
     const roadId = roadResult.insertId;
 
     // 3. 이미지 업로드
-    const fileUrl = await uploadToGCP(fullImagePath, data.imagePath);
+    const fileUrl = await uploadToGCP(fullImagePath, data.image);
 
     // 4. pothole 삽입
     await connection.query(
@@ -85,19 +100,19 @@ async function uploadOne(connection, data) {
       ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
         roadId,
-        data.pothole_depth,
-        data.pothole_width,
-        data.pothole_latitude,
-        data.pothole_longitude,
-        data.pothole_date,
+        data.pothole.depth,
+        data.pothole.width,
+        data.location.latitude,
+        data.location.longitude,
+        data.pothole.date,
         fileUrl
       ]
     );
 
-    console.log('✅ 저장 완료:', data.imagePath);
+    console.log('✅ 저장 완료:', data.image);
 
   } catch (err) {
-    console.error('❌ 업로드 실패:', data.imagePath, err.message);
+    console.error('❌ 업로드 실패:', data.image, err.message);
   }
 }
 
