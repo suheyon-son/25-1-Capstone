@@ -30,6 +30,17 @@ app.use(routes);
 
 const PORT = process.env.PORT || 3000;
 
+setInterval(() => {
+  connection.query('SELECT 1', (err) => {
+    if (err){
+      console.error('DB 연결 확인 실패:', err.message);
+    }
+    else {
+      console.log('DB 연결 상태 확인 성공');
+    }
+  });
+}, 1000 * 60 * 30 );
+
 async function startServer() {
   try {
     console.log('마이그레이션 시작...');

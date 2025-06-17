@@ -1,8 +1,32 @@
 const mysql = require('mysql2/promise');
 const fs = require('fs');
 const path = require('path');
-const iconv = require('iconv-lite');
-const csv = require('csv-parser');
+const axios = require('axios');
+const FormData = require('form-data');
+require('dotenv').config();
+
+const dataList = JSON.parse(fs.readFileSync('./migrate-data.json', 'utf8')).slice(0, 150);
+
+async function uploadOne(data) {
+  const form = new FormData();
+
+  form.append('pothole_depth', data.pothole_depth);
+  form.append('pothole_width', data.pothole_width);
+  form.append('pothole_latitude', data.pothole_latitude);
+  form.append('pothole_longitude', data.pothole_longitude);
+  form.append('pothole_date', data.pothole_date);
+  form.append('image', fs.createReadStream(data.imagePath));
+
+  try {
+    const response = await axios.post('/api/upload', form, {
+      headers: form.getHeaders(),
+      maxBodyLength: Infinity,
+    });
+    console.log('✅ 업로드 성공:', data.imagePath, response.data.fileUrl);
+  } catch (error) {
+    console.error('❌ 업로드 실패:', data.imagePath, error.response?.data || error.message);
+  }
+}
 
 async function runMigration() {
   const connection = await mysql.createConnection({
@@ -16,7 +40,7 @@ async function runMigration() {
   await connection.query(`DROP TABLE IF EXISTS pothole`);
   await connection.query(`DROP TABLE IF EXISTS road`);
   await connection.query(`DROP TABLE IF EXISTS roadname`);
-  console.log('기존 테이블을 삭제했습니다.');
+  console.log('🧹 기존 테이블 삭제 완료');
 
   // 새 테이블 생성
   const createTableQueries = [
@@ -61,59 +85,16 @@ async function runMigration() {
   for (const query of createTableQueries) {
     await connection.query(query);
   }
+  console.log('📦 새 테이블 생성 완료');
 
-  // 이미 1048575 이상이면 건너뜀
-  const [rows] = await connection.query(
-    `SELECT COUNT(*) as count FROM roadname WHERE roadname_id >= 1048575`
-  );
-  if (rows[0].count > 0) {
-    console.log('🟡 roadname_id 1048575 이상이 이미 존재합니다. 마이그레이션을 건너뜁니다.');
-    await connection.end();
-    return;
+  // 데이터 업로드
+  for (let i = 0; i < dataList.length; i++) {
+    console.log(`⬆️ ${i + 1}/${dataList.length} 데이터 업로드 중...`);
+    await uploadOne(dataList[i]);
   }
 
-  // CSV 데이터 읽기
-  const csvFilePath = path.resolve(__dirname, 'roadname_data.csv');
-  const csvData = [];
-
-  await new Promise((resolve, reject) => {
-    fs.createReadStream(csvFilePath)
-      .pipe(iconv.decodeStream('cp949'))
-      .pipe(csv())
-      .on('data', (row) => csvData.push(row))
-      .on('end', resolve)
-      .on('error', reject);
-  });
-
-for (const row of csvData) {
-  if (!row.roadname_id || isNaN(row.roadname_id)) continue;
-
-  const values = [
-    parseInt(row.roadname_id, 10),
-    row.roadname_sido?.trim() || '',
-    row.roadname_sigungu?.trim() || '',
-    row.roadname_emd?.trim() || '',
-    row.roadname_roadname?.trim() || '',
-    row.jibun_sido?.trim() || '',
-    row.jibun_sigungu?.trim() || '',
-    row.jibun_emd?.trim() || '',
-    row.jibun_other?.trim() || '',
-    row.jibun_number?.trim() || ''
-  ];
-
-  await connection.execute(
-    `INSERT IGNORE INTO roadname (
-      roadname_id, roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname,
-      jibun_sido, jibun_sigungu, jibun_emd, jibun_other, jibun_number
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    values
-  );
-
-  console.log(`Inserted roadname_id: ${row.roadname_id}`);
-}
-
-  console.log('✅ roadname 테이블 마이그레이션 완료');
   await connection.end();
+  console.log('🎉 마이그레이션 완료!');
 }
 
 module.exports = runMigration;
