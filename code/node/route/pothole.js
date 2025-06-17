@@ -67,7 +67,7 @@ router.get('/api/pothole-location', (req, res) => {
 
   // 최종 SQL 생성
   let sql = `
-    select p.pothole_latitude, p.pothole_longitude from (roadname n inner join road r on n.roadname_id = r.roadname_id) inner join pothole p on r.road_id = p.road_id
+    select p.pothole_longitude, p.pothole_latitude from (roadname n inner join road r on n.roadname_id = r.roadname_id) inner join pothole p on r.road_id = p.road_id
   `;
 
   if (conditions.length > 0) {
