@@ -39,7 +39,7 @@ router.get('/api/pothole-location', (req, res) => {
     values.push(roadname_roadname);
   }
 
-  // 숫자 필터링 (범위 조건)
+  // 숫자 필터링
   if (depthMin) {
     conditions.push('p.pothole_depth >= ?');
     values.push(parseFloat(depthMin));
@@ -65,21 +65,29 @@ router.get('/api/pothole-location', (req, res) => {
     values.push(parseFloat(dangerMax));
   }
 
-  // 최종 SQL 생성
+  // 최종 SQL
   let sql = `
-    select p.pothole_longitude, p.pothole_latitude from (roadname n inner join road r on n.roadname_id = r.roadname_id) inner join pothole p on r.road_id = p.road_id
+    SELECT p.pothole_longitude, p.pothole_latitude 
+    FROM (roadname n 
+    INNER JOIN road r ON n.roadname_id = r.roadname_id) 
+    INNER JOIN pothole p ON r.road_id = p.road_id
   `;
 
   if (conditions.length > 0) {
-    sql += ` WHERE ` + conditions.join(' AND ');
+    sql += ' WHERE ' + conditions.join(' AND ');
   }
+
+  // ✅ 로그 출력
+  console.log('🟡 최종 SQL:', sql);
+  console.log('🟡 파라미터:', values);
 
   connection.query(sql, values, (err, results) => {
     if (err) {
-      console.error('쿼리 에러:', err);
+      console.error('🔴 쿼리 에러:', err);
       return res.status(500).json({ error: '서버 오류' });
     }
-    res.json(results); // 바로 marker 배열로 사용 가능
+    console.log('🟢 조회 결과:', results);
+    res.json(results);
   });
 });
 
