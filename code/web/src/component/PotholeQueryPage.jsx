@@ -14,7 +14,12 @@ const thLabels = [
 ];
 
 function formatKoreanDate(dateStr) {
-  return dayjs(dateStr).format("YYYY년 MM월 DD일 HH:mm:ss");
+  if (!dateStr) return "";
+
+  const formatted = dayjs(dateStr);
+  if (!formatted.isValid()) return "";
+
+  return formatted.format('YYYY년 MM월 DD일 HH:mm:ss');
 }
 
 const PotholeQueryPage = ({ setSelectedImageUrl }) => {

@@ -67,7 +67,7 @@ router.get('/api/pothole-location', (req, res) => {
 
   // 최종 SQL 생성
   let sql = `
-    SELECT p.id, p.latitude, p.longitude, p.depth, p.width, p.danger, p.url
+    SELECT p.pothole_latitude, p.pothole_longitude
     FROM pothole p
   `;
 
