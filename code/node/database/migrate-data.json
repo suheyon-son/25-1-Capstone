@@ -10,7 +10,7 @@
     "pothole_latitude": 37.5665,
     "pothole_longitude": 126.978,
     "pothole_date": "2025-05-30",
-    "imagePath": "./포장파손1.jpeg"
+    "imagePath": "포장파손1.jpeg"
   },
   {
     "roadname_sido": "서울",
@@ -23,7 +23,7 @@
     "pothole_latitude": 37.5702,
     "pothole_longitude": 126.983,
     "pothole_date": "2025-05-19",
-    "imagePath": "./포장파손2.jpeg"
+    "imagePath": "포장파손2.jpeg"
   },
   {
     "roadname_sido": "서울",
@@ -36,7 +36,7 @@
     "pothole_latitude": 37.559,
     "pothole_longitude": 126.9754,
     "pothole_date": "2025-06-02",
-    "imagePath": "./포장파손3.jpeg"
+    "imagePath": "포장파손3.jpeg"
   },
   {
     "roadname_sido": "서울",
@@ -49,7 +49,7 @@
     "pothole_latitude": 37.5796,
     "pothole_longitude": 126.977,
     "pothole_date": "2025-05-22",
-    "imagePath": "./포장파손4.jpeg"
+    "imagePath": "포장파손4.jpeg"
   },
   {
     "roadname_sido": "서울",
@@ -62,7 +62,7 @@
     "pothole_latitude": 37.534,
     "pothole_longitude": 126.993,
     "pothole_date": "2025-06-03",
-    "imagePath": "./포장파손5.jpeg"
+    "imagePath": "포장파손5.jpeg"
   },
   {
     "roadname_sido": "부산",
@@ -75,7 +75,7 @@
     "pothole_latitude": 35.1796,
     "pothole_longitude": 129.0756,
     "pothole_date": "2025-06-02",
-    "imagePath": "./포장파손6.jpeg"
+    "imagePath": "포장파손6.jpeg"
   },
   {
     "roadname_sido": "부산",
@@ -88,7 +88,7 @@
     "pothole_latitude": 35.1532,
     "pothole_longitude": 129.0595,
     "pothole_date": "2025-05-26",
-    "imagePath": "./포장파손7.jpeg"
+    "imagePath": "포장파손7.jpeg"
   },
   {
     "roadname_sido": "부산",
@@ -101,7 +101,7 @@
     "pothole_latitude": 35.161,
     "pothole_longitude": 129.0645,
     "pothole_date": "2025-05-24",
-    "imagePath": "./포장파손8.jpeg"
+    "imagePath": "포장파손8.jpeg"
   },
   {
     "roadname_sido": "부산",
@@ -114,7 +114,7 @@
     "pothole_latitude": 35.0992,
     "pothole_longitude": 129.0308,
     "pothole_date": "2025-05-21",
-    "imagePath": "./포장파손9.jpeg"
+    "imagePath": "포장파손9.jpeg"
   },
   {
     "roadname_sido": "부산",
@@ -127,7 +127,7 @@
     "pothole_latitude": 35.1794,
     "pothole_longitude": 129.0711,
     "pothole_date": "2025-06-03",
-    "imagePath": "./포장파손10.jpeg"
+    "imagePath": "포장파손10.jpeg"
   },
   {
     "roadname_sido": "대구",
@@ -140,7 +140,7 @@
     "pothole_latitude": 35.8714,
     "pothole_longitude": 128.6014,
     "pothole_date": "2025-05-22",
-    "imagePath": "./포장파손11.jpeg"
+    "imagePath": "포장파손11.jpeg"
   },
   {
     "roadname_sido": "대구",
@@ -153,7 +153,7 @@
     "pothole_latitude": 35.8722,
     "pothole_longitude": 128.5965,
     "pothole_date": "2025-06-05",
-    "imagePath": "./포장파손12.jpeg"
+    "imagePath": "포장파손12.jpeg"
   },
   {
     "roadname_sido": "대구",
@@ -166,7 +166,7 @@
     "pothole_latitude": 35.8532,
     "pothole_longitude": 128.5825,
     "pothole_date": "2025-06-08",
-    "imagePath": "./포장파손13.jpeg"
+    "imagePath": "포장파손13.jpeg"
   },
   {
     "roadname_sido": "대구",
@@ -179,7 +179,7 @@
     "pothole_latitude": 35.8668,
     "pothole_longitude": 128.5944,
     "pothole_date": "2025-06-11",
-    "imagePath": "./포장파손14.jpeg"
+    "imagePath": "포장파손14.jpeg"
   },
   {
     "roadname_sido": "대구",
@@ -192,7 +192,7 @@
     "pothole_latitude": 35.8577,
     "pothole_longitude": 128.6037,
     "pothole_date": "2025-06-01",
-    "imagePath": "./포장파손15.jpeg"
+    "imagePath": "포장파손15.jpeg"
   },
   {
     "roadname_sido": "인천",
@@ -205,7 +205,7 @@
     "pothole_latitude": 37.4563,
     "pothole_longitude": 126.7052,
     "pothole_date": "2025-06-06",
-    "imagePath": "./포장파손16.jpeg"
+    "imagePath": "포장파손16.jpeg"
   },
   {
     "roadname_sido": "인천",
@@ -218,7 +218,7 @@
     "pothole_latitude": 37.448,
     "pothole_longitude": 126.7014,
     "pothole_date": "2025-06-11",
-    "imagePath": "./포장파손17.jpeg"
+    "imagePath": "포장파손17.jpeg"
   },
   {
     "roadname_sido": "인천",
@@ -231,7 +231,7 @@
     "pothole_latitude": 37.4637,
     "pothole_longitude": 126.6812,
     "pothole_date": "2025-06-07",
-    "imagePath": "./포장파손18.jpeg"
+    "imagePath": "포장파손18.jpeg"
   },
   {
     "roadname_sido": "인천",
@@ -244,7 +244,7 @@
     "pothole_latitude": 37.4931,
     "pothole_longitude": 126.7208,
     "pothole_date": "2025-06-08",
-    "imagePath": "./포장파손19.jpeg"
+    "imagePath": "포장파손19.jpeg"
   },
   {
     "roadname_sido": "인천",
@@ -257,7 +257,7 @@
     "pothole_latitude": 37.4695,
     "pothole_longitude": 126.6356,
     "pothole_date": "2025-06-14",
-    "imagePath": "./포장파손20.jpeg"
+    "imagePath": "포장파손20.jpeg"
   },
   {
     "roadname_sido": "광주",
@@ -270,7 +270,7 @@
     "pothole_latitude": 35.1595,
     "pothole_longitude": 126.8526,
     "pothole_date": "2025-06-17",
-    "imagePath": "./포장파손21.jpeg"
+    "imagePath": "포장파손21.jpeg"
   },
   {
     "roadname_sido": "광주",
@@ -283,7 +283,7 @@
     "pothole_latitude": 35.16,
     "pothole_longitude": 126.8513,
     "pothole_date": "2025-06-16",
-    "imagePath": "./포장파손22.jpeg"
+    "imagePath": "포장파손22.jpeg"
   },
   {
     "roadname_sido": "광주",
@@ -296,7 +296,7 @@
     "pothole_latitude": 35.1685,
     "pothole_longitude": 126.8879,
     "pothole_date": "2025-05-24",
-    "imagePath": "./포장파손23.jpeg"
+    "imagePath": "포장파손23.jpeg"
   },
   {
     "roadname_sido": "광주",
@@ -309,7 +309,7 @@
     "pothole_latitude": 35.1453,
     "pothole_longitude": 126.919,
     "pothole_date": "2025-05-22",
-    "imagePath": "./포장파손24.jpeg"
+    "imagePath": "포장파손24.jpeg"
   },
   {
     "roadname_sido": "광주",
@@ -322,7 +322,7 @@
     "pothole_latitude": 35.1391,
     "pothole_longitude": 126.7933,
     "pothole_date": "2025-06-04",
-    "imagePath": "./포장파손25.jpeg"
+    "imagePath": "포장파손25.jpeg"
   },
   {
     "roadname_sido": "대전",
@@ -335,7 +335,7 @@
     "pothole_latitude": 36.3504,
     "pothole_longitude": 127.3845,
     "pothole_date": "2025-06-17",
-    "imagePath": "./포장파손26.jpeg"
+    "imagePath": "포장파손26.jpeg"
   },
   {
     "roadname_sido": "대전",
@@ -348,7 +348,7 @@
     "pothole_latitude": 36.3511,
     "pothole_longitude": 127.3882,
     "pothole_date": "2025-06-01",
-    "imagePath": "./포장파손27.jpeg"
+    "imagePath": "포장파손27.jpeg"
   },
   {
     "roadname_sido": "대전",
@@ -361,7 +361,7 @@
     "pothole_latitude": 36.3365,
     "pothole_longitude": 127.434,
     "pothole_date": "2025-06-17",
-    "imagePath": "./포장파손28.jpeg"
+    "imagePath": "포장파손28.jpeg"
   },
   {
     "roadname_sido": "대전",
@@ -374,7 +374,7 @@
     "pothole_latitude": 36.3482,
     "pothole_longitude": 127.3982,
     "pothole_date": "2025-05-22",
-    "imagePath": "./포장파손29.jpeg"
+    "imagePath": "포장파손29.jpeg"
   },
   {
     "roadname_sido": "대전",
@@ -387,7 +387,7 @@
     "pothole_latitude": 36.3387,
     "pothole_longitude": 127.3941,
     "pothole_date": "2025-06-12",
-    "imagePath": "./포장파손30.jpeg"
+    "imagePath": "포장파손30.jpeg"
   },
   {
     "roadname_sido": "울산",
@@ -400,7 +400,7 @@
     "pothole_latitude": 35.5384,
     "pothole_longitude": 129.3114,
     "pothole_date": "2025-05-18",
-    "imagePath": "./포장파손31.jpeg"
+    "imagePath": "포장파손31.jpeg"
   },
   {
     "roadname_sido": "울산",
@@ -413,7 +413,7 @@
     "pothole_latitude": 35.5465,
     "pothole_longitude": 129.258,
     "pothole_date": "2025-06-10",
-    "imagePath": "./포장파손32.jpeg"
+    "imagePath": "포장파손32.jpeg"
   },
   {
     "roadname_sido": "울산",
@@ -426,7 +426,7 @@
     "pothole_latitude": 35.5552,
     "pothole_longitude": 129.3104,
     "pothole_date": "2025-06-17",
-    "imagePath": "./포장파손33.jpeg"
+    "imagePath": "포장파손33.jpeg"
   },
   {
     "roadname_sido": "울산",
@@ -439,7 +439,7 @@
     "pothole_latitude": 35.535,
     "pothole_longitude": 129.29,
     "pothole_date": "2025-05-24",
-    "imagePath": "./포장파손34.jpeg"
+    "imagePath": "포장파손34.jpeg"
   },
   {
     "roadname_sido": "울산",
@@ -452,7 +452,7 @@
     "pothole_latitude": 35.5017,
     "pothole_longitude": 129.4157,
     "pothole_date": "2025-06-12",
-    "imagePath": "./포장파손35.jpeg"
+    "imagePath": "포장파손35.jpeg"
   },
   {
     "roadname_sido": "세종특별자치시",
@@ -465,7 +465,7 @@
     "pothole_latitude": 36.48,
     "pothole_longitude": 127.2894,
     "pothole_date": "2025-05-23",
-    "imagePath": "./포장파손36.jpeg"
+    "imagePath": "포장파손36.jpeg"
   },
   {
     "roadname_sido": "세종특별자치시",
@@ -478,7 +478,7 @@
     "pothole_latitude": 36.4807,
     "pothole_longitude": 127.2863,
     "pothole_date": "2025-05-19",
-    "imagePath": "./포장파손37.jpeg"
+    "imagePath": "포장파손37.jpeg"
   },
   {
     "roadname_sido": "세종특별자치시",
@@ -491,7 +491,7 @@
     "pothole_latitude": 36.4785,
     "pothole_longitude": 127.2624,
     "pothole_date": "2025-05-27",
-    "imagePath": "./포장파손38.jpeg"
+    "imagePath": "포장파손38.jpeg"
   },
   {
     "roadname_sido": "세종특별자치시",
@@ -504,7 +504,7 @@
     "pothole_latitude": 36.4719,
     "pothole_longitude": 127.2568,
     "pothole_date": "2025-05-25",
-    "imagePath": "./포장파손39.jpeg"
+    "imagePath": "포장파손39.jpeg"
   },
   {
     "roadname_sido": "세종특별자치시",
@@ -517,7 +517,7 @@
     "pothole_latitude": 36.4796,
     "pothole_longitude": 127.2401,
     "pothole_date": "2025-06-16",
-    "imagePath": "./포장파손40.jpeg"
+    "imagePath": "포장파손40.jpeg"
   },
   {
     "roadname_sido": "경기",
@@ -530,7 +530,7 @@
     "pothole_latitude": 37.3948,
     "pothole_longitude": 127.1115,
     "pothole_date": "2025-06-15",
-    "imagePath": "./포장파손41.jpeg"
+    "imagePath": "포장파손41.jpeg"
   },
   {
     "roadname_sido": "경기",
@@ -543,7 +543,7 @@
     "pothole_latitude": 37.29,
     "pothole_longitude": 127.0459,
     "pothole_date": "2025-06-04",
-    "imagePath": "./포장파손42.jpeg"
+    "imagePath": "포장파손42.jpeg"
   },
   {
     "roadname_sido": "경기",
@@ -556,7 +556,7 @@
     "pothole_latitude": 37.2997,
     "pothole_longitude": 126.8372,
     "pothole_date": "2025-06-12",
-    "imagePath": "./포장파손43.jpeg"
+    "imagePath": "포장파손43.jpeg"
   },
   {
     "roadname_sido": "경기",
@@ -569,7 +569,7 @@
     "pothole_latitude": 37.7387,
     "pothole_longitude": 127.042,
     "pothole_date": "2025-05-19",
-    "imagePath": "./포장파손44.jpeg"
+    "imagePath": "포장파손44.jpeg"
   },
   {
     "roadname_sido": "서울",
@@ -582,7 +582,7 @@
     "pothole_latitude": 37.585,
     "pothole_longitude": 126.9813,
     "pothole_date": "2025-06-07",
-    "imagePath": "./포장파손45.jpeg"
+    "imagePath": "포장파손45.jpeg"
   },
   {
     "roadname_sido": "강원특별자치도",
@@ -595,7 +595,7 @@
     "pothole_latitude": 37.8813,
     "pothole_longitude": 127.7342,
     "pothole_date": "2025-06-08",
-    "imagePath": "./포장파손46.jpeg"
+    "imagePath": "포장파손46.jpeg"
   },
   {
     "roadname_sido": "강원특별자치도",
@@ -608,7 +608,7 @@
     "pothole_latitude": 37.7584,
     "pothole_longitude": 128.8739,
     "pothole_date": "2025-05-24",
-    "imagePath": "./포장파손47.jpeg"
+    "imagePath": "포장파손47.jpeg"
   },
   {
     "roadname_sido": "강원특별자치도",
@@ -621,7 +621,7 @@
     "pothole_latitude": 37.4522,
     "pothole_longitude": 129.1652,
     "pothole_date": "2025-05-25",
-    "imagePath": "./포장파손48.jpeg"
+    "imagePath": "포장파손48.jpeg"
   },
   {
     "roadname_sido": "강원특별자치도",
@@ -634,7 +634,7 @@
     "pothole_latitude": 37.4684,
     "pothole_longitude": 129.0576,
     "pothole_date": "2025-06-02",
-    "imagePath": "./포장파손49.jpeg"
+    "imagePath": "포장파손49.jpeg"
   },
   {
     "roadname_sido": "강원특별자치도",
@@ -647,7 +647,7 @@
     "pothole_latitude": 38.2069,
     "pothole_longitude": 128.5912,
     "pothole_date": "2025-06-05",
-    "imagePath": "./포장파손50.jpeg"
+    "imagePath": "포장파손50.jpeg"
   },
   {
     "roadname_sido": "충북",
@@ -660,7 +660,7 @@
     "pothole_latitude": 36.6424,
     "pothole_longitude": 127.4893,
     "pothole_date": "2025-06-16",
-    "imagePath": "./포장파손51.jpeg"
+    "imagePath": "포장파손51.jpeg"
   },
   {
     "roadname_sido": "충북",
@@ -673,7 +673,7 @@
     "pothole_latitude": 36.6253,
     "pothole_longitude": 127.4325,
     "pothole_date": "2025-06-05",
-    "imagePath": "./포장파손52.jpeg"
+    "imagePath": "포장파손52.jpeg"
   },
   {
     "roadname_sido": "충북",
@@ -686,7 +686,7 @@
     "pothole_latitude": 36.8122,
     "pothole_longitude": 127.7995,
     "pothole_date": "2025-05-30",
-    "imagePath": "./포장파손53.jpeg"
+    "imagePath": "포장파손53.jpeg"
   },
   {
     "roadname_sido": "충북",
@@ -699,7 +699,7 @@
     "pothole_latitude": 36.9914,
     "pothole_longitude": 127.9251,
     "pothole_date": "2025-05-24",
-    "imagePath": "./포장파손54.jpeg"
+    "imagePath": "포장파손54.jpeg"
   },
   {
     "roadname_sido": "충북",
@@ -712,7 +712,7 @@
     "pothole_latitude": 36.7771,
     "pothole_longitude": 127.5902,
     "pothole_date": "2025-06-09",
-    "imagePath": "./포장파손55.jpeg"
+    "imagePath": "포장파손55.jpeg"
   },
   {
     "roadname_sido": "충남",
@@ -725,7 +725,7 @@
     "pothole_latitude": 36.4624,
     "pothole_longitude": 126.8046,
     "pothole_date": "2025-05-28",
-    "imagePath": "./포장파손56.jpeg"
+    "imagePath": "포장파손56.jpeg"
   },
   {
     "roadname_sido": "충남",
@@ -738,7 +738,7 @@
     "pothole_latitude": 36.9074,
     "pothole_longitude": 126.689,
     "pothole_date": "2025-06-15",
-    "imagePath": "./포장파손57.jpeg"
+    "imagePath": "포장파손57.jpeg"
   },
   {
     "roadname_sido": "충남",
@@ -751,7 +751,7 @@
     "pothole_latitude": 36.7816,
     "pothole_longitude": 127.0046,
     "pothole_date": "2025-05-27",
-    "imagePath": "./포장파손58.jpeg"
+    "imagePath": "포장파손58.jpeg"
   },
   {
     "roadname_sido": "충남",
@@ -764,7 +764,7 @@
     "pothole_latitude": 36.2849,
     "pothole_longitude": 127.2446,
     "pothole_date": "2025-05-29",
-    "imagePath": "./포장파손59.jpeg"
+    "imagePath": "포장파손59.jpeg"
   },
   {
     "roadname_sido": "충남",
@@ -777,7 +777,7 @@
     "pothole_latitude": 36.4561,
     "pothole_longitude": 126.8042,
     "pothole_date": "2025-05-22",
-    "imagePath": "./포장파손60.jpeg"
+    "imagePath": "포장파손60.jpeg"
   },
   {
     "roadname_sido": "전북특별자치도",
@@ -790,7 +790,7 @@
     "pothole_latitude": 35.8213,
     "pothole_longitude": 127.148,
     "pothole_date": "2025-05-21",
-    "imagePath": "./포장파손61.jpeg"
+    "imagePath": "포장파손61.jpeg"
   },
   {
     "roadname_sido": "전북특별자치도",
@@ -803,7 +803,7 @@
     "pothole_latitude": 35.846,
     "pothole_longitude": 127.1225,
     "pothole_date": "2025-06-04",
-    "imagePath": "./포장파손62.jpeg"
+    "imagePath": "포장파손62.jpeg"
   },
   {
     "roadname_sido": "전북특별자치도",
@@ -816,7 +816,7 @@
     "pothole_latitude": 35.9608,
     "pothole_longitude": 126.6828,
     "pothole_date": "2025-06-09",
-    "imagePath": "./포장파손63.jpeg"
+    "imagePath": "포장파손63.jpeg"
   },
   {
     "roadname_sido": "전북특별자치도",
@@ -829,7 +829,7 @@
     "pothole_latitude": 35.5692,
     "pothole_longitude": 126.8519,
     "pothole_date": "2025-05-25",
-    "imagePath": "./포장파손64.jpeg"
+    "imagePath": "포장파손64.jpeg"
   },
   {
     "roadname_sido": "전북특별자치도",
@@ -842,7 +842,7 @@
     "pothole_latitude": 35.6196,
     "pothole_longitude": 127.2892,
     "pothole_date": "2025-06-16",
-    "imagePath": "./포장파손65.jpeg"
+    "imagePath": "포장파손65.jpeg"
   },
   {
     "roadname_sido": "전남",
@@ -855,7 +855,7 @@
     "pothole_latitude": 34.815,
     "pothole_longitude": 126.4629,
     "pothole_date": "2025-06-03",
-    "imagePath": "./포장파손66.jpeg"
+    "imagePath": "포장파손66.jpeg"
   },
   {
     "roadname_sido": "전남",
@@ -868,7 +868,7 @@
     "pothole_latitude": 35.016,
     "pothole_longitude": 126.713,
     "pothole_date": "2025-06-06",
-    "imagePath": "./포장파손67.jpeg"
+    "imagePath": "포장파손67.jpeg"
   },
   {
     "roadname_sido": "전남",
@@ -881,7 +881,7 @@
     "pothole_latitude": 34.9601,
     "pothole_longitude": 127.518,
     "pothole_date": "2025-05-27",
-    "imagePath": "./포장파손68.jpeg"
+    "imagePath": "포장파손68.jpeg"
   },
   {
     "roadname_sido": "전남",
@@ -894,7 +894,7 @@
     "pothole_latitude": 34.7647,
     "pothole_longitude": 127.6621,
     "pothole_date": "2025-06-08",
-    "imagePath": "./포장파손69.jpeg"
+    "imagePath": "포장파손69.jpeg"
   },
   {
     "roadname_sido": "전남",
@@ -907,7 +907,7 @@
     "pothole_latitude": 34.9472,
     "pothole_longitude": 126.9461,
     "pothole_date": "2025-05-29",
-    "imagePath": "./포장파손70.jpeg"
+    "imagePath": "포장파손70.jpeg"
   },
   {
     "roadname_sido": "경북",
@@ -920,7 +920,7 @@
     "pothole_latitude": 36.1195,
     "pothole_longitude": 128.3446,
     "pothole_date": "2025-06-12",
-    "imagePath": "./포장파손71.jpeg"
+    "imagePath": "포장파손71.jpeg"
   },
   {
     "roadname_sido": "경북",
@@ -933,7 +933,7 @@
     "pothole_latitude": 35.8692,
     "pothole_longitude": 129.2245,
     "pothole_date": "2025-06-07",
-    "imagePath": "./포장파손72.jpeg"
+    "imagePath": "포장파손72.jpeg"
   },
   {
     "roadname_sido": "경북",
@@ -946,7 +946,7 @@
     "pothole_latitude": 36.0156,
     "pothole_longitude": 129.365,
     "pothole_date": "2025-05-31",
-    "imagePath": "./포장파손73.jpeg"
+    "imagePath": "포장파손73.jpeg"
   },
   {
     "roadname_sido": "경북",
@@ -959,7 +959,7 @@
     "pothole_latitude": 36.5615,
     "pothole_longitude": 128.7211,
     "pothole_date": "2025-05-22",
-    "imagePath": "./포장파손74.jpeg"
+    "imagePath": "포장파손74.jpeg"
   },
   {
     "roadname_sido": "경북",
@@ -972,7 +972,7 @@
     "pothole_latitude": 36.5426,
     "pothole_longitude": 128.7944,
     "pothole_date": "2025-06-16",
-    "imagePath": "./포장파손75.jpeg"
+    "imagePath": "포장파손75.jpeg"
   },
   {
     "roadname_sido": "경남",
@@ -985,7 +985,7 @@
     "pothole_latitude": 35.2271,
     "pothole_longitude": 128.6811,
     "pothole_date": "2025-06-12",
-    "imagePath": "./포장파손76.jpeg"
+    "imagePath": "포장파손76.jpeg"
   },
   {
     "roadname_sido": "경남",
@@ -998,7 +998,7 @@
     "pothole_latitude": 35.1676,
     "pothole_longitude": 128.1448,
     "pothole_date": "2025-06-01",
-    "imagePath": "./포장파손77.jpeg"
+    "imagePath": "포장파손77.jpeg"
   },
   {
     "roadname_sido": "울산",
@@ -1011,7 +1011,7 @@
     "pothole_latitude": 35.5453,
     "pothole_longitude": 129.2585,
     "pothole_date": "2025-06-01",
-    "imagePath": "./포장파손78.jpeg"
+    "imagePath": "포장파손78.jpeg"
   },
   {
     "roadname_sido": "경남",
@@ -1024,7 +1024,7 @@
     "pothole_latitude": 35.0037,
     "pothole_longitude": 128.0645,
     "pothole_date": "2025-06-15",
-    "imagePath": "./포장파손79.jpeg"
+    "imagePath": "포장파손79.jpeg"
   },
   {
     "roadname_sido": "경남",
@@ -1037,7 +1037,7 @@
     "pothole_latitude": 34.8961,
     "pothole_longitude": 128.6205,
     "pothole_date": "2025-06-03",
-    "imagePath": "./포장파손80.jpeg"
+    "imagePath": "포장파손80.jpeg"
   },
   {
     "roadname_sido": "제주특별자치도",
@@ -1050,7 +1050,7 @@
     "pothole_latitude": 33.4996,
     "pothole_longitude": 126.5312,
     "pothole_date": "2025-06-13",
-    "imagePath": "./포장파손81.jpeg"
+    "imagePath": "포장파손81.jpeg"
   },
   {
     "roadname_sido": "제주특별자치도",
@@ -1063,7 +1063,7 @@
     "pothole_latitude": 33.4887,
     "pothole_longitude": 126.4997,
     "pothole_date": "2025-05-31",
-    "imagePath": "./포장파손82.jpeg"
+    "imagePath": "포장파손82.jpeg"
   },
   {
     "roadname_sido": "제주특별자치도",
@@ -1076,7 +1076,7 @@
     "pothole_latitude": 33.2521,
     "pothole_longitude": 126.5615,
     "pothole_date": "2025-06-08",
-    "imagePath": "./포장파손83.jpeg"
+    "imagePath": "포장파손83.jpeg"
   },
   {
     "roadname_sido": "제주특별자치도",
@@ -1089,7 +1089,7 @@
     "pothole_latitude": 33.5096,
     "pothole_longitude": 126.5228,
     "pothole_date": "2025-06-07",
-    "imagePath": "./포장파손84.jpeg"
+    "imagePath": "포장파손84.jpeg"
   },
   {
     "roadname_sido": "제주특별자치도",
@@ -1102,6 +1102,6 @@
     "pothole_latitude": 33.4894,
     "pothole_longitude": 126.5334,
     "pothole_date": "2025-05-28",
-    "imagePath": "./포장파손85.jpeg"
+    "imagePath": "포장파손85.jpeg"
   }
 ]
