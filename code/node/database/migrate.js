@@ -9,13 +9,14 @@ const dataList = JSON.parse(fs.readFileSync(path.join(__dirname, 'migrate-data.j
 
 async function uploadOne(data) {
   const form = new FormData();
+  const fullImagePath = path.join(__dirname, 'images', data.imagePath);
 
   form.append('pothole_depth', data.pothole_depth);
   form.append('pothole_width', data.pothole_width);
   form.append('pothole_latitude', data.pothole_latitude);
   form.append('pothole_longitude', data.pothole_longitude);
   form.append('pothole_date', data.pothole_date);
-  form.append('image', fs.createReadStream(data.imagePath));
+  form.append('image', fs.createReadStream(fullImagePath));
 
   try {
     const response = await axios.post('/api/upload', form, {
