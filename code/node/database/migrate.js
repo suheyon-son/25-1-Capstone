@@ -17,7 +17,6 @@ const bucket = storage.bucket(process.env.GOOGLE_CLOUD_STORAGE_BUCKET);
 async function uploadToGCP(localFilePath, destFileName) {
   await bucket.upload(localFilePath, {
     destination: destFileName,
-    public: true,
     metadata: {
       cacheControl: 'public, max-age=31536000',
     },
