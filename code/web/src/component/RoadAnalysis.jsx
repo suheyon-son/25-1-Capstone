@@ -18,15 +18,15 @@ const PotholeQueryPage = () => {
   const [topRoads, setTopRoads] = useState([]);
 
   useEffect(() => {
-    fetch("/api/analysis/timeline")
+    fetch(`${process.env.REACT_APP_API_URL}/api/analysis/timeline`)
       .then((res) => res.json())
       .then(setTimelineData);
 
-    fetch("/api/analysis/danger")
+    fetch(`${process.env.REACT_APP_API_URL}/api/analysis/danger`)
       .then((res) => res.json())
       .then(setDangerData);
 
-    fetch("/api/analysis/by-road")
+    fetch(`${process.env.REACT_APP_API_URL}/api/analysis/by-road`)
       .then((res) => res.json())
       .then(setTopRoads);
   }, []);
