@@ -151,7 +151,7 @@ router.post('/api/upload', upload.single('image'), async (req, res) => {
     if (!roadId) {
       const [result] = await connection.promise().query(
         `INSERT INTO road (roadname_id, road_lastdate, road_lastfixdate, road_danger, road_count, road_state)
-         VALUES (?, ?, NULL, NULL, 1, 0)`,
+         VALUES (?, ?, NULL, NULL, 1, "보수 전")`,
         [roadnameId, today]
       );
       roadId = result.insertId;

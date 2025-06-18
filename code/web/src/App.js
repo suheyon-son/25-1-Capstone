@@ -21,8 +21,6 @@ function App() {
         return <RoadAnalysis />;
       case 'map':
         return <PotholeMapPage />;
-      case 'temp':
-        return <Temp />;
       default:
         return <PotholeQueryPage setSelectedImageUrl={setSelectedImageUrl}/>;
     }
@@ -51,10 +49,9 @@ function App() {
           </div>
 
           <div className={`nav-buttons ${menuOpen ? 'active' : ''}`}>
-            <button onClick={() => handleNavClick('pothole')} className="nav-button">포트홀 분석</button>
+            <button onClick={() => handleNavClick('pothole')} className="nav-button">도로 현황</button>
             <button onClick={() => handleNavClick('road')} className="nav-button">도로 분석</button>
             <button onClick={() => handleNavClick('map')} className="nav-button">포트홀 지도</button>
-            <button onClick={() => handleNavClick('temp')} className="nav-button">임시</button>
           </div>
         </div>
 

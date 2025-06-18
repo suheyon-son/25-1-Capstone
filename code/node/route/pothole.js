@@ -145,4 +145,69 @@ router.get('/api/roadSearch', (req, res) => {
   });
 });
 
+router.get('/api/analysis/timeline', (req, res) => {
+  const sql = `
+    SELECT DATE_FORMAT(p.pothole_date, '%Y-%m') AS month, COUNT(*) AS count
+    FROM pothole p
+    GROUP BY month
+    ORDER BY month ASC
+  `;
+
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.error('timeline 분석 에러:', err);
+      return res.status(500).json({ error: '서버 오류' });
+    }
+    res.json(results); // [{ month: '2025-05', count: 15 }, ...]
+  });
+});
+
+router.get('/api/analysis/danger', (req, res) => {
+  const sql = `
+    SELECT 
+      CASE 
+        WHEN pothole_danger >= 9 THEN '위험도 5'
+        WHEN pothole_danger >= 7 THEN '위험도 4'
+        WHEN pothole_danger >= 5 THEN '위험도 3'
+        WHEN pothole_danger >= 3 THEN '위험도 2'
+        ELSE '위험도 1'
+      END AS level,
+      COUNT(*) AS count
+    FROM pothole
+    GROUP BY level
+    ORDER BY level
+  `;
+
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.error('danger 분석 에러:', err);
+      return res.status(500).json({ error: '서버 오류' });
+    }
+    res.json(results); // [{ level: '위험도 3', count: 12 }, ...]
+  });
+});
+
+router.get('/api/analysis/by-road', (req, res) => {
+  const sql = `
+    SELECT 
+      n.roadname_roadname, 
+      ROUND(AVG(p.pothole_danger), 2) AS avg_danger,
+      COUNT(*) AS pothole_count
+    FROM pothole p
+    INNER JOIN road r ON p.road_id = r.road_id
+    INNER JOIN roadname n ON r.roadname_id = n.roadname_id
+    GROUP BY n.roadname_roadname
+    ORDER BY avg_danger DESC
+    LIMIT 10
+  `;
+
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.error('도로별 분석 에러:', err);
+      return res.status(500).json({ error: '서버 오류' });
+    }
+    res.json(results); // [{ roadname_roadname: '서울대로', avg_danger: 3.2, pothole_count: 5 }, ...]
+  });
+});
+
 module.exports = router;

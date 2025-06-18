@@ -4,7 +4,7 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const express = require('express');
 const cors = require('cors');
 
-require('./database/db'); // DB 연결
+const connection = require('./database/db');
 const routes = require('./route/index'); // routes 폴더 내 index.js (분리된 라우터)
 
 const runMigration = require('./database/migrate');
