@@ -166,14 +166,14 @@ router.get('/api/analysis/danger', (req, res) => {
   const sql = `
     SELECT 
       CASE 
-        WHEN pothole_danger >= 9 THEN '위험도 5'
-        WHEN pothole_danger >= 7 THEN '위험도 4'
-        WHEN pothole_danger >= 5 THEN '위험도 3'
-        WHEN pothole_danger >= 3 THEN '위험도 2'
+        WHEN road_danger >= 9 THEN '위험도 5'
+        WHEN road_danger >= 7 THEN '위험도 4'
+        WHEN road_danger >= 5 THEN '위험도 3'
+        WHEN road_danger >= 3 THEN '위험도 2'
         ELSE '위험도 1'
       END AS level,
       COUNT(*) AS count
-    FROM pothole
+    FROM road
     GROUP BY level
     ORDER BY level
   `;
@@ -191,7 +191,7 @@ router.get('/api/analysis/by-road', (req, res) => {
   const sql = `
     SELECT 
       n.roadname_roadname, 
-      ROUND(AVG(p.pothole_danger), 2) AS avg_danger,
+      ROUND(AVG(r.road_danger), 2) AS avg_danger,
       COUNT(*) AS pothole_count
     FROM pothole p
     INNER JOIN road r ON p.road_id = r.road_id
