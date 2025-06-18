@@ -2,34 +2,39 @@
 .analysis-layout {
   display: flex;
   gap: 20px;
-  flex-wrap: wrap;
   padding: 20px;
   box-sizing: border-box;
 }
 
-/* 왼쪽 그래프 컬럼 (시간/심각도 분석) */
-.time-chart,
-.severity-chart {
-  flex: 1 1 48%;
+/* 왼쪽 컬럼: 시간 + 심각도 그래프 (세로 정렬) */
+.left-column {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 오른쪽 컬럼: Top 10 테이블 */
+.right-column {
+  flex: 1;
   background: #fff;
   padding: 18px 22px;
   border-radius: 6px;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
-  min-width: 350px;
+  min-width: 320px;
 }
 
-/* 오른쪽 Top10 테이블 */
-.top10-list {
-  flex: 1 1 100%;
+/* 공통 차트 박스 스타일 */
+.chart-section {
   background: #fff;
   padding: 18px 22px;
   border-radius: 6px;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
-  min-width: 350px;
 }
 
-/* 공통 차트 박스 제목 */
-.chart-box h3 {
+/* 공통 제목 스타일 */
+.chart-section h3,
+.right-column h3 {
   color: #174F87;
   font-size: 1.2rem;
   font-weight: bold;
