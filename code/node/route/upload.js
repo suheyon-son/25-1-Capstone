@@ -42,6 +42,29 @@ function saveImageRecord(data) {
   });
 }
 
+function parseRoadAddress(fullAddress) {
+  if (!fullAddress) return null;
+  const parts = fullAddress.trim().split(/\s+/);
+  return {
+    sido: parts[0] || '',
+    sigungu: parts[1] || '',
+    emd: parts[2] || '',
+    roadname: parts[3] || '', // 예: '테헤란로'
+  };
+}
+
+function parseJibunAddress(fullAddress) {
+  if (!fullAddress) return null;
+  const parts = fullAddress.trim().split(/\s+/);
+  return {
+    sido: parts[0] || '',
+    sigungu: parts[1] || '',
+    emd: parts[2] || '',
+    other: parts[3] || null, // 예: '역삼동'
+    number: parts[4] || null, // 예: '123-4'
+  };
+}
+
 // POST /api/upload
 router.post('/api/upload', upload.single('image'), async (req, res) => {
   if (!req.file) {
