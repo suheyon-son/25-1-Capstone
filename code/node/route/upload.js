@@ -3,23 +3,22 @@ const multer = require('multer');
 const { Storage } = require('@google-cloud/storage');
 const { format } = require('date-fns');
 const path = require('path');
+const fs = require('fs');
 const connection = require('../database/db');
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-const roadaddr = require('./roadaddr'); // 도로명 주소 함수
-const {
-    findRoadId,
-} = require('../database/query'); 
+const roadaddr = require('./roadaddr');
+const { findRoadId } = require('../database/query');
+
 const router = express.Router();
 
 const storage = new Storage();
 const bucket = storage.bucket(process.env.GOOGLE_CLOUD_STORAGE_BUCKET);
 
 const upload = multer({
-  dest: 'temp/',
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  dest: path.join(__dirname, '../temp/'),
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-// 포트홀 이미지 및 데이터 DB 저장 함수
 function saveImageRecord(data) {
   return new Promise((resolve, reject) => {
     const sql = `
@@ -49,7 +48,7 @@ function parseRoadAddress(fullAddress) {
     sido: parts[0] || '',
     sigungu: parts[1] || '',
     emd: parts[2] || '',
-    roadname: parts[3] || '', // 예: '테헤란로'
+    roadname: parts[3] || '',
   };
 }
 
@@ -60,12 +59,11 @@ function parseJibunAddress(fullAddress) {
     sido: parts[0] || '',
     sigungu: parts[1] || '',
     emd: parts[2] || '',
-    other: parts[3] || null, // 예: '역삼동'
-    number: parts[4] || null, // 예: '123-4'
+    other: parts[3] || null,
+    number: parts[4] || null,
   };
 }
 
-// POST /api/upload
 router.post('/api/upload', upload.single('image'), async (req, res) => {
   if (!req.file) {
     console.log('파일이 없습니다.');
@@ -80,11 +78,27 @@ router.post('/api/upload', upload.single('image'), async (req, res) => {
 
   try {
     const filename = req.file.filename;
+    const localFilePath = path.join(__dirname, '../temp', filename);
+
+    // ✅ GCS에 업로드
+    await bucket.upload(localFilePath, {
+      destination: filename,
+      contentType: req.file.mimetype,
+      metadata: {
+        cacheControl: 'public, max-age=31536000',
+      },
+    });
+    console.log('✅ GCS 업로드 완료');
+
+    // ✅ 로컬 임시파일 삭제
+    fs.unlink(localFilePath, (err) => {
+      if (err) console.error('❌ 로컬 파일 삭제 실패:', err);
+      else console.log('🧹 로컬 파일 삭제 완료');
+    });
+
     const fileUrl = `https://storage.googleapis.com/${process.env.GOOGLE_CLOUD_STORAGE_BUCKET}/${filename}`;
-    console.log('업로드 파일명:', filename);
     console.log('파일 URL:', fileUrl);
 
-    // 위도/경도로 도로명 주소 가져오기
     const { roadAddress, jibunAddress } = await roadaddr.getRoadAddress(pothole_longitude, pothole_latitude);
     console.log('조회된 도로명 주소:', roadAddress);
     console.log('조회된 지번 주소:', jibunAddress);
@@ -93,78 +107,48 @@ router.post('/api/upload', upload.single('image'), async (req, res) => {
 
     if (roadAddress) {
       const query = findRoadId(roadAddress, null);
-      console.log('도로명 주소 쿼리:', query);
-      if (query && query.sql && query.values && query.values.every(v => v !== undefined && v !== null)) {
+      if (query && query.sql && query.values.every(v => v !== undefined && v !== null)) {
         const [rows] = await connection.promise().query(query.sql, query.values);
-        console.log('도로명 주소 쿼리 결과:', rows);
-        if (rows.length > 0) {
-          roadnameId = rows[0].roadname_id;
-          console.log('도로명 주소에서 찾은 roadnameId:', roadnameId);
-        }
+        if (rows.length > 0) roadnameId = rows[0].roadname_id;
       }
     }
 
     if (!roadnameId && jibunAddress) {
       const query = findRoadId(null, jibunAddress);
-      console.log('지번 주소 쿼리:', query);
-      if (query && query.sql && query.values && query.values.every(v => v !== undefined && v !== null)) {
+      if (query && query.sql && query.values.every(v => v !== undefined && v !== null)) {
         const [rows] = await connection.promise().query(query.sql, query.values);
-        console.log('지번 주소 쿼리 결과:', rows);
-        if (rows.length > 0) {
-          roadnameId = rows[0].roadname_id;
-          console.log('지번 주소에서 찾은 roadnameId:', roadnameId);
-        }
+        if (rows.length > 0) roadnameId = rows[0].roadname_id;
       }
     }
 
-if (!roadnameId) {
-  console.log('도로명 주소 또는 지번 주소로 roadname_id를 찾을 수 없습니다.');
+    if (!roadnameId) {
+      if (!roadAddress && !jibunAddress) {
+        return res.status(400).json({ error: '주소 정보가 없어 roadname을 추가할 수 없습니다.' });
+      }
 
-  if (!roadAddress && !jibunAddress) {
-    return res.status(400).json({ error: '주소 정보가 없어 roadname을 추가할 수 없습니다.' });
-  }
+      const parsedRoad = parseRoadAddress(roadAddress);
+      const parsedJibun = parseJibunAddress(jibunAddress);
 
-  const parsedRoad = parseRoadAddress(roadAddress);
-  const parsedJibun = parseJibunAddress(jibunAddress);
-
-  const roadname_sido = parsedRoad?.sido || '';
-  const roadname_sigungu = parsedRoad?.sigungu || '';
-  const roadname_emd = parsedRoad?.emd || '';
-  const roadname_roadname = parsedRoad?.roadname || '';
-
-  const jibun_sido = parsedJibun?.sido || null;
-  const jibun_sigungu = parsedJibun?.sigungu || null;
-  const jibun_emd = parsedJibun?.emd || null;
-  const jibun_other = parsedJibun?.other || null;
-  const jibun_number = parsedJibun?.number || null;
-
-  if (!roadname_sido || !roadname_sigungu || !roadname_emd || !roadname_roadname) {
-    return res.status(400).json({ error: '도로명 주소 정보가 충분하지 않습니다.' });
-  }
-
-  const [insertResult] = await connection.promise().query(
-    `INSERT INTO roadname (
-      roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname,
-      jibun_sido, jibun_sigungu, jibun_emd, jibun_other, jibun_number
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [
-      roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname,
-      jibun_sido, jibun_sigungu, jibun_emd, jibun_other, jibun_number,
-    ]
-  );
-
-  roadnameId = insertResult.insertId;
-  console.log('새로 추가된 roadname_id:', roadnameId);
-}
+      const [insertResult] = await connection.promise().query(
+        `INSERT INTO roadname (
+          roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname,
+          jibun_sido, jibun_sigungu, jibun_emd, jibun_other, jibun_number
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          parsedRoad?.sido || '', parsedRoad?.sigungu || '', parsedRoad?.emd || '', parsedRoad?.roadname || '',
+          parsedJibun?.sido || null, parsedJibun?.sigungu || null, parsedJibun?.emd || null,
+          parsedJibun?.other || null, parsedJibun?.number || null,
+        ]
+      );
+      roadnameId = insertResult.insertId;
+    }
 
     const [existingRoad] = await connection.promise().query(`SELECT road_id FROM road WHERE roadname_id = ?`, [roadnameId]);
-    console.log('기존 road 조회 결과:', existingRoad);
     let roadId = existingRoad.length > 0 ? existingRoad[0].road_id : null;
 
     const today = format(new Date(), 'yyyy-MM-dd');
 
     if (!roadId) {
-      console.log('road 테이블에 새 도로 추가');
       const [result] = await connection.promise().query(
         `INSERT INTO road (roadname_id, road_lastdate, road_lastfixdate, road_danger, road_count, road_state)
          VALUES (?, ?, NULL, NULL, 1, 0)`,
@@ -172,7 +156,6 @@ if (!roadnameId) {
       );
       roadId = result.insertId;
     } else {
-      console.log('기존 도로 업데이트, roadId:', roadId);
       await connection.promise().query(
         `UPDATE road SET road_count = road_count + 1, road_lastdate = ? WHERE road_id = ?`,
         [today, roadId]
