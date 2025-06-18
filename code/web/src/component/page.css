@@ -1,47 +1,73 @@
-.search-dropdown-wrap {
-  position: relative;
-  display: inline-block;
-  margin-right: 7px;
+/* 전체 레이아웃 */
+.analysis-layout {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 20px;
+  box-sizing: border-box;
 }
-.search-dropdown {
-  width: 100px;
-  padding: 4px 24px 4px 8px;
-  border: 1px solid #b0b0b0;
-  border-radius: 4px;
-  background: #fafbfc;
-  cursor: pointer;
-  font-size: 1em;
-  color: #333;
-}
-.dropdown-arrow {
-  position: absolute;
-  right: 8px;
-  top: 6px;
-  cursor: pointer;
-  font-size: 0.9em;
-  color: #666;
-  user-select: none;
-}
-.dropdown-list {
-  position: absolute;
-  top: 110%;
-  left: 0;
-  width: 120px;
+
+/* 왼쪽 그래프 컬럼 (시간/심각도 분석) */
+.time-chart,
+.severity-chart {
+  flex: 1 1 48%;
   background: #fff;
-  border: 1px solid #b0b0b0;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  z-index: 20;
-  padding: 3px 0;
+  padding: 18px 22px;
+  border-radius: 6px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  min-width: 350px;
 }
-.dropdown-option {
-  padding: 7px 12px;
-  cursor: pointer;
-  font-size: 1em;
-  color: #333;
-  transition: background 0.15s, color 0.15s;
+
+/* 오른쪽 Top10 테이블 */
+.top10-list {
+  flex: 1 1 100%;
+  background: #fff;
+  padding: 18px 22px;
+  border-radius: 6px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  min-width: 350px;
 }
-.dropdown-option:hover, .dropdown-option.selected {
-  background: #e7f1fb;
+
+/* 공통 차트 박스 제목 */
+.chart-box h3 {
   color: #174F87;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+
+/* 테이블 스타일 */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.table th {
+  background-color: #f0f4ff;
+  color: #174F87;
+  font-weight: bold;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* 푸터 */
+.footer {
+  background-color: #174F87;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: right;
+  padding: 12px 20px;
+  margin-top: 20px;
 }

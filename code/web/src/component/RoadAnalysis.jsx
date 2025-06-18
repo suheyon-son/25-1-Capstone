@@ -82,8 +82,9 @@ const PotholeQueryPage = () => {
           </tbody>
         </table>
       </div>
+      <footer className="footer">2025 Capstone Design</footer>
     </div>
   );
 };
 
-export default PotholeQueryPage;
+export default RoadAnalysis;
