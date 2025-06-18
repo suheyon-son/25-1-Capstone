@@ -129,13 +129,21 @@ router.post('/api/upload', upload.single('image'), async (req, res) => {
       const parsedRoad = parseRoadAddress(roadAddress);
       const parsedJibun = parseJibunAddress(jibunAddress);
 
+      // 도로명 주소 유효성 최소 기준: 시도 + 시군구 + 도로명
+      const hasMinimumRoadInfo =
+        parsedRoad?.sido && parsedRoad?.sigungu && parsedRoad?.roadname;
+
+      if (!hasMinimumRoadInfo) {
+        return res.status(400).json({ error: '도로명 주소에 시도, 시군구, 도로명이 모두 필요합니다.' });
+      }
+
       const [insertResult] = await connection.promise().query(
         `INSERT INTO roadname (
           roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname,
           jibun_sido, jibun_sigungu, jibun_emd, jibun_other, jibun_number
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
-          parsedRoad?.sido || '', parsedRoad?.sigungu || '', parsedRoad?.emd || '', parsedRoad?.roadname || '',
+          parsedRoad?.sido || '', parsedRoad?.sigungu || '', parsedRoad?.emd || null, parsedRoad?.roadname || '',
           parsedJibun?.sido || null, parsedJibun?.sigungu || null, parsedJibun?.emd || null,
           parsedJibun?.other || null, parsedJibun?.number || null,
         ]

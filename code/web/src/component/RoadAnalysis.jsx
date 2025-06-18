@@ -87,4 +87,4 @@ const PotholeQueryPage = () => {
   );
 };
 
-export default RoadAnalysis;
+export default PotholeQueryPage;
