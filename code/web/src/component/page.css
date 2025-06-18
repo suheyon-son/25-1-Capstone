@@ -1,12 +1,19 @@
-/* 전체 레이아웃 */
-.analysis-layout {
+.container {
+  font-family: sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
   display: flex;
-  gap: 20px;
-  padding: 20px;
-  box-sizing: border-box;
+  flex-direction: column;
 }
 
-/* 왼쪽 컬럼: 시간 + 심각도 그래프 (세로 정렬) */
+.analysis-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  padding: 20px;
+  flex: 1;
+}
+
 .left-column {
   flex: 2;
   display: flex;
@@ -14,7 +21,6 @@
   gap: 20px;
 }
 
-/* 오른쪽 컬럼: Top 10 테이블 */
 .right-column {
   flex: 1;
   background: #fff;
@@ -24,7 +30,6 @@
   min-width: 320px;
 }
 
-/* 공통 차트 박스 스타일 */
 .chart-section {
   background: #fff;
   padding: 18px 22px;
@@ -32,7 +37,6 @@
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 공통 제목 스타일 */
 .chart-section h3,
 .right-column h3 {
   color: #174F87;
@@ -41,38 +45,32 @@
   margin-bottom: 14px;
 }
 
-/* 테이블 스타일 */
-.table {
+.top-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
-.table th,
-.table td {
+.top-table th,
+.top-table td {
   border: 1px solid #ccc;
-  padding: 10px;
+  padding: 8px 12px;
   text-align: center;
   font-size: 1rem;
 }
 
-.table th {
-  background-color: #f0f4ff;
+.top-table th {
+  background-color: #e5f0ff;
   color: #174F87;
   font-weight: bold;
 }
 
-.table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-/* 푸터 */
 .footer {
-  background-color: #174F87;
+  background: #174F87;
   color: white;
   font-weight: bold;
   font-size: 1rem;
   text-align: right;
   padding: 12px 20px;
-  margin-top: 20px;
+  margin-top: auto;
 }
