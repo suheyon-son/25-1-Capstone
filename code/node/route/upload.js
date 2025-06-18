@@ -94,10 +94,45 @@ router.post('/api/upload', upload.single('image'), async (req, res) => {
       }
     }
 
-    if (!roadnameId) {
-      console.log('도로명 주소 또는 지번 주소로 roadname_id를 찾을 수 없습니다.');
-      return res.status(400).json({ error: '도로명 주소 또는 지번 주소로 roadname_id를 찾을 수 없습니다.' });
-    }
+if (!roadnameId) {
+  console.log('도로명 주소 또는 지번 주소로 roadname_id를 찾을 수 없습니다.');
+
+  if (!roadAddress && !jibunAddress) {
+    return res.status(400).json({ error: '주소 정보가 없어 roadname을 추가할 수 없습니다.' });
+  }
+
+  const parsedRoad = parseRoadAddress(roadAddress);
+  const parsedJibun = parseJibunAddress(jibunAddress);
+
+  const roadname_sido = parsedRoad?.sido || '';
+  const roadname_sigungu = parsedRoad?.sigungu || '';
+  const roadname_emd = parsedRoad?.emd || '';
+  const roadname_roadname = parsedRoad?.roadname || '';
+
+  const jibun_sido = parsedJibun?.sido || null;
+  const jibun_sigungu = parsedJibun?.sigungu || null;
+  const jibun_emd = parsedJibun?.emd || null;
+  const jibun_other = parsedJibun?.other || null;
+  const jibun_number = parsedJibun?.number || null;
+
+  if (!roadname_sido || !roadname_sigungu || !roadname_emd || !roadname_roadname) {
+    return res.status(400).json({ error: '도로명 주소 정보가 충분하지 않습니다.' });
+  }
+
+  const [insertResult] = await connection.promise().query(
+    `INSERT INTO roadname (
+      roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname,
+      jibun_sido, jibun_sigungu, jibun_emd, jibun_other, jibun_number
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      roadname_sido, roadname_sigungu, roadname_emd, roadname_roadname,
+      jibun_sido, jibun_sigungu, jibun_emd, jibun_other, jibun_number,
+    ]
+  );
+
+  roadnameId = insertResult.insertId;
+  console.log('새로 추가된 roadname_id:', roadnameId);
+}
 
     const [existingRoad] = await connection.promise().query(`SELECT road_id FROM road WHERE roadname_id = ?`, [roadnameId]);
     console.log('기존 road 조회 결과:', existingRoad);

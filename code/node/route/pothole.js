@@ -57,11 +57,11 @@ router.get('/api/pothole-location', (req, res) => {
     values.push(parseFloat(widthMax));
   }
   if (dangerMin) {
-    conditions.push('p.pothole_danger >= ?');
+    conditions.push('r.road_danger >= ?');
     values.push(parseFloat(dangerMin));
   }
   if (dangerMax) {
-    conditions.push('p.pothole_danger <= ?');
+    conditions.push('r.road_danger <= ?');
     values.push(parseFloat(dangerMax));
   }
 
